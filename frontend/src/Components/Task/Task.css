@@ -65,6 +65,17 @@
   margin-bottom: 10px;
 }
 
+.taskMainBox .allTaskBox .perTaskBox .down {
+  flex-wrap: wrap;
+}
+
+.taskMainBox .allTaskBox .perTaskBox .up .title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .taskMainBox .allTaskBox .perTaskBox .down :where(.date, .subTask, .listN) {
   display: flex;
   justify-content: center;
@@ -79,4 +90,19 @@
   border-radius: 5px;
   padding: 0px 10px;
   margin-right: 10px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .taskMainBox {
+    width: 95%;
+    height: 80vh;
+    z-index: 1;
+    margin-top: 5px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .taskMainBox .allTaskBox .perTaskBox .down :where(.date, .subTask, .listN) {
+    margin: 5px 20px;
+  }
 }

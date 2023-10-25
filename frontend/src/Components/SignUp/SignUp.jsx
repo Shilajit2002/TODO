@@ -7,6 +7,7 @@ import "./SignUp.css";
 // Axios
 import axios from "axios";
 
+// Logo
 import logo from "../../Logo/logo.webp";
 
 /* ------------- Backend Url ------------- */

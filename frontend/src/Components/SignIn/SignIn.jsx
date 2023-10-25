@@ -7,6 +7,7 @@ import "./SignIn.css";
 // Axios
 import axios from "axios";
 
+// Profile Logo
 import prof from "./Assets/profLogo.avif";
 
 /* ------------- Backend Url ------------- */
@@ -48,7 +49,9 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const SignIn = () => {
+  // UseNavigate
   const navigate = useNavigate();
+  
   // Password Show,Hide UseState
   const [hidePass, setHidePass] = useState({
     type: "password",

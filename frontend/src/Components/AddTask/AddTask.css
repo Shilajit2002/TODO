@@ -13,7 +13,7 @@
   user-select: none;
 }
 
-.addTaskBox :where(textarea,input[type="date"]) {
+.addTaskBox :where(textarea, input[type="date"]) {
   width: 90%;
   padding: 10px;
   margin: 10px 0;
@@ -22,6 +22,11 @@
   border-style: none;
   border-bottom: 0.5px solid rgb(117, 117, 117);
   min-height: 60px;
+  max-height: fit-content;
+}
+
+.addTaskBox textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .addTaskBox textarea::placeholder {
@@ -58,8 +63,7 @@
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
-
-.addTaskBox .doneBox{
+.addTaskBox .doneBox {
   width: 90%;
   display: flex;
   justify-content: flex-start;
@@ -68,7 +72,7 @@
   padding: 0px;
 }
 
-.addTaskBox .subBox{
+.addTaskBox .subBox {
   width: 90%;
   display: flex;
   justify-content: center;
@@ -89,11 +93,11 @@
   border: 0.5px solid #f5770f;
 }
 
-.addTaskBox::-webkit-scrollbar{
+.addTaskBox::-webkit-scrollbar {
   display: none;
 }
 
-.addTaskBox .fixed{
+.addTaskBox .fixed {
   width: 100%;
   position: sticky;
   bottom: 0;
@@ -102,4 +106,14 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .addTaskBox {
+    width: 90%;
+    min-height: fit-content;
+    max-height: 70vh;
+    z-index: 1;
+    margin-bottom: 20px;
+  }
 }

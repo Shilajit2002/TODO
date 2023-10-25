@@ -38,6 +38,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EditIcon from "@mui/icons-material/Edit";
 // Delete Icon
 import DeleteIcon from "@mui/icons-material/Delete";
+// Close Icon
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 /* ------------- MUI Components ------------- */
 // Style
@@ -144,32 +146,43 @@ const Details = (props) => {
     // Task List UseState Props
     taskList,
     setTaskList,
+    // Details Open UseState
+    detailsOpen,
+    setDetailsOpen,
+    // Width UseState
+    w,
   } = props;
 
   /* ------------- All UseState ------------- */
   // User UseState
   const [user, setUser] = useState();
+
   // Per List Data UseState
   const [listData, setListData] = useState({
     name: "",
     color: "#000000",
     edit: false,
   });
+
   // Search UseState
   const [search, setSearch] = useState("");
+
   // Date Val UseState
   const [dateVal, setDateVal] = useState("");
+
   // Edit List UseState
   const [editList, setEditList] = useState({
     _id: "",
     count: 0,
   });
+
   // Snackbar Alert UseState
   const [snack, setSnack] = useState({
     open: false,
     message: "",
     severity: "error",
   });
+
   // Open List Dialog Box UseState
   const [openListDialog, setOpenListDialog] = useState(false);
 
@@ -381,7 +394,7 @@ const Details = (props) => {
       if (
         listData.name !== "" &&
         listData.name.trim("") !== "" &&
-        listData.name.length <= 15
+        listData.name.length <= 20
       ) {
         // Send to the Backend
         axios
@@ -416,10 +429,10 @@ const Details = (props) => {
             });
           });
       } else {
-        if (listData.name.length >= 15) {
+        if (listData.name.length >= 20) {
           setSnack({
             open: true,
-            message: "List name conatins max. 15 letters",
+            message: "List name conatins max. 20 letters",
             severity: "warning",
           });
         } else {
@@ -446,7 +459,7 @@ const Details = (props) => {
       if (
         listData.name !== "" &&
         listData.name.trim("") !== "" &&
-        listData.name.length <= 15
+        listData.name.length <= 20
       ) {
         // Send to the Backend
         axios
@@ -522,10 +535,10 @@ const Details = (props) => {
             });
           });
       } else {
-        if (listData.name.length >= 15) {
+        if (listData.name.length >= 20) {
           setSnack({
             open: true,
-            message: "List name conatins max. 15 letters",
+            message: "List name conatins max. 20 letters",
             severity: "warning",
           });
         } else {
@@ -609,6 +622,16 @@ const Details = (props) => {
             className="detailsBox"
             style={{
               backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+              // Set the Width for Responsive
+              width: (() => {
+                if (w <= 1000 && detailsOpen) {
+                  return "300px";
+                } else if (w <= 1000 && !detailsOpen) {
+                  return "0px";
+                } else if (w > 1000) {
+                  return "23%";
+                }
+              })(),
             }}
           >
             {/* If User Data Present */}
@@ -641,6 +664,19 @@ const Details = (props) => {
                   >
                     Hey, {user.fullname.split(" ")[0].toUpperCase()}
                   </h5>
+
+                  {/* Close Icon */}
+                  <HighlightOffIcon
+                    sx={{
+                      color: "red",
+                      m: 1,
+                      display: w <= 1000 ? "block" : "none",
+                      marginLeft: "auto",
+                    }}
+                    onClick={() => {
+                      setDetailsOpen(false);
+                    }}
+                  />
                 </div>
               </>
             ) : (
@@ -711,6 +747,7 @@ const Details = (props) => {
               >
                 TASKS
               </p>
+
               {/* Upcoming Box */}
               <div
                 className={`tfilter ${activeFilter === 1 ? "active" : ""}`}
@@ -731,6 +768,7 @@ const Details = (props) => {
                 {/* Count */}
                 <span>{taskCount.upcomingCount}</span>
               </div>
+
               {/* Today Box */}
               <div
                 className={`tfilter ${activeFilter === 2 ? "active" : ""}`}
@@ -751,6 +789,7 @@ const Details = (props) => {
                 {/* Count */}
                 <span>{taskCount.todayCount}</span>
               </div>
+
               {/* Previous Box */}
               <div
                 className={`tfilter ${activeFilter === 3 ? "active" : ""}`}
@@ -771,6 +810,7 @@ const Details = (props) => {
                 {/* Count */}
                 <span>{taskCount.previousCount}</span>
               </div>
+
               {/* Date Box */}
               <div
                 className={`tfilter ${activeFilter === 4 ? "active" : ""}`}
@@ -805,6 +845,7 @@ const Details = (props) => {
               >
                 LISTS
               </p>
+
               {/* If List is Present */}
               {taskList && taskList.listArr.length !== 0 ? (
                 taskList.listArr.map((tl) => {
@@ -833,7 +874,16 @@ const Details = (props) => {
                         }}
                       ></div>
                       {/* Heading */}
-                      <span>{tl.name}</span>
+                      <span
+                        style={{
+                          display: "block",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {tl.name}
+                      </span>
                       {/* Edit Icon */}
                       <EditIcon
                         sx={{

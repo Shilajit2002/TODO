@@ -1,5 +1,5 @@
-// React & UseState & UseEffect
-import React, { useState, useEffect } from "react";
+// React & UseState
+import React, { useState } from "react";
 // AddTask CSS
 import "./AddTask.css";
 
@@ -16,46 +16,16 @@ import baseUrl from "../../Helper/BaseUrl";
 import Cookies from "js-cookie";
 
 /* ------------- MUI Icons ------------- */
-// Search Icon
-import SearchIcon from "@mui/icons-material/Search";
-// Upcoming Icon
-import UpcomingIcon from "@mui/icons-material/Upcoming";
-// Checklist Icon
-import ChecklistIcon from "@mui/icons-material/Checklist";
-// Previous Icon
-import UndoIcon from "@mui/icons-material/Undo";
 // Add Icon
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-// Account Icon
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-// Sign Out Icon
-import LogoutIcon from "@mui/icons-material/Logout";
-// Edit Icon
-import EditIcon from "@mui/icons-material/Edit";
 // Delete Icon
 import DeleteIcon from "@mui/icons-material/Delete";
 
 /* ------------- MUI Components ------------- */
-// Style
-import { styled } from "@mui/material/styles";
-// Form Control Label
-import FormControlLabel from "@mui/material/FormControlLabel";
-// Switch
-import Switch from "@mui/material/Switch";
 // Button
 import Button from "@mui/material/Button";
 // TextFiled
 import TextField from "@mui/material/TextField";
-// Dialog
-import Dialog from "@mui/material/Dialog";
-// Dialog Actions
-import DialogActions from "@mui/material/DialogActions";
-// Dialog Content
-import DialogContent from "@mui/material/DialogContent";
-// Dialog Title
-import DialogTitle from "@mui/material/DialogTitle";
-// Input Adorment
-import InputAdornment from "@mui/material/InputAdornment";
 // Menu Item
 import MenuItem from "@mui/material/MenuItem";
 // Select
@@ -66,10 +36,6 @@ import FormControl from "@mui/material/FormControl";
 import { pink } from "@mui/material/colors";
 // Checkbox
 import Checkbox from "@mui/material/Checkbox";
-
-/* ------------- MUI Structure ------------- */
-// Skeleton
-import Skeleton from "@mui/material/Skeleton";
 
 /* ------------- Alerts ------------- */
 // Snack Bar
@@ -85,31 +51,30 @@ const AddTask = (props) => {
     window.location.href = "/";
   }
 
+  // Take All Props
   const {
+    // Mode UseState Props
     mode,
+    // Create Task UseState Props
     createTask,
     setCreateTask,
+    // Edit Task UseState Props
     editTask,
-    setEditTask, // Task List UseState Props
+    setEditTask,
+    // Task List UseState Props
     taskList,
     setTaskList,
-    task,
+    // Task UseState Props
     setTask,
+    // Task Filter UseState Props
     setTaskFilter,
+    // Task Count UseState Props
     setTaskCount,
+    // Active Filter UseState Props
     activeFilter,
-    setActiveFilter,
   } = props;
 
-  const handleCreateTaskChange = (e) => {
-    const { name, value } = e.target;
-
-    setCreateTask({
-      ...createTask,
-      [name]: value,
-    });
-  };
-
+  /* ------------- All UseState ------------- */
   // Snackbar Alert UseState
   const [snack, setSnack] = useState({
     open: false,
@@ -129,24 +94,38 @@ const AddTask = (props) => {
     });
   };
 
+  // Handle Create Task Func
+  const handleCreateTaskChange = (e) => {
+    const { name, value } = e.target;
+
+    setCreateTask({
+      ...createTask,
+      [name]: value,
+    });
+  };
+
+  // SubTask Change Func
   const handleSubTaskChange = (e, i) => {
     const updateSubtask = { ...createTask };
     updateSubtask.subtask[i] = e.target.value;
     setCreateTask(updateSubtask);
   };
 
+  // Add SubTask Func
   const addSubTask = () => {
     const updateSubtask = { ...createTask };
     updateSubtask.subtask.push("");
     setCreateTask(updateSubtask);
   };
 
+  // Delete SubTask Func
   const deleteSubTask = (i) => {
     const updateSubtask = { ...createTask };
     updateSubtask.subtask.splice(i, 1);
     setCreateTask(updateSubtask);
   };
 
+  // Count Format Func
   const handleCountFormat = (c) => {
     if (c >= 100) {
       return "99+";
@@ -154,6 +133,7 @@ const AddTask = (props) => {
     return c;
   };
 
+  // All List Func
   const allList = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -179,10 +159,12 @@ const AddTask = (props) => {
     }
   };
 
+  // Count Func
   const countFunc = (res) => {
     const today = new Date();
     const todayDate = today.toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
+    // If the response present
     if (res.data && res.data.taskArr.length !== 0) {
       const { taskArr } = res.data;
 
@@ -209,10 +191,16 @@ const AddTask = (props) => {
       });
 
       // API Call to get filter data
-      if (activeFilter !== 1 && activeFilter !== 2 && activeFilter !== 3 && activeFilter !== 4) {
+      if (
+        activeFilter !== 1 &&
+        activeFilter !== 2 &&
+        activeFilter !== 3 &&
+        activeFilter !== 4
+      ) {
         const token = Cookies.get("token");
         const userid = Cookies.get("userid");
 
+        //  Axios get request from backend
         axios
           .get(`${baseUrl}/api/list/get-per-list/${userid}/${activeFilter}`, {
             headers: {
@@ -234,10 +222,8 @@ const AddTask = (props) => {
               count: filterCount,
               filteredTasks: filteredTasks,
             });
-
-            // Perform additional actions with filtered tasks here
           })
-          .catch((err)=>{
+          .catch((err) => {
             window.location.reload();
           });
       } else {
@@ -265,8 +251,6 @@ const AddTask = (props) => {
           count: filterCount,
           filteredTasks: filteredTasks,
         });
-
-        // Perform additional actions with filtered tasks here
       }
 
       // Reset other state variables
@@ -281,9 +265,13 @@ const AddTask = (props) => {
       });
       setEditTask(false);
     }
+    // When no task is present
+    else {
+      window.location.reload();
+    }
   };
 
-  // List Add Func
+  // Task Add Func
   const handleSubmitTask = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -305,7 +293,9 @@ const AddTask = (props) => {
             },
           })
           .then((res) => {
+            // Call AllList Func
             allList();
+            // Count Func
             countFunc(res);
 
             // Success Result
@@ -335,6 +325,7 @@ const AddTask = (props) => {
     }
   };
 
+  // Task Edit Func
   const handleEditTask = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -356,7 +347,9 @@ const AddTask = (props) => {
             },
           })
           .then((res) => {
+            // Call AllList Func
             allList();
+            // Count Func
             countFunc(res);
 
             // Success Result
@@ -386,6 +379,7 @@ const AddTask = (props) => {
     }
   };
 
+  // Delete Func
   const handleDeleteTask = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -405,7 +399,9 @@ const AddTask = (props) => {
             }
           )
           .then((res) => {
+            // Call AllList Func
             allList();
+            // Count Func
             countFunc(res);
 
             // Success Result
@@ -434,12 +430,14 @@ const AddTask = (props) => {
       {/* If Token and UserId present then open Details Page */}
       {Cookies.get("token") && Cookies.get("userid") ? (
         <>
+          {/* Main Add Task Box */}
           <div
             className="addTaskBox"
             style={{
               backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
             }}
           >
+            {/* Heading */}
             <h5
               style={{
                 alignSelf: "flex-start",
@@ -450,6 +448,8 @@ const AddTask = (props) => {
             >
               {editTask ? "Update Task" : "Create Task"}
             </h5>
+
+            {/* Title Field */}
             <TextField
               label="Title"
               color="warning"
@@ -478,6 +478,8 @@ const AddTask = (props) => {
                 },
               }}
             />
+
+            {/* Description Field */}
             <textarea
               name="description"
               id=""
@@ -491,7 +493,8 @@ const AddTask = (props) => {
                 letterSpacing: "0.5px",
               }}
             />
-            {/* Select Form */}
+
+            {/* Select Form List*/}
             <FormControl
               className="listInput"
               sx={{
@@ -519,6 +522,7 @@ const AddTask = (props) => {
                 <MenuItem disabled selected value="Select List">
                   Select List
                 </MenuItem>
+                {/* Menu Item */}
                 {taskList &&
                   taskList.listArr.length !== 0 &&
                   taskList.listArr?.map((option, index) => {
@@ -554,7 +558,9 @@ const AddTask = (props) => {
               }}
             />
 
+            {/* Done Box */}
             <div className="doneBox">
+              {/* CheckBox */}
               <Checkbox
                 id="done"
                 checked={createTask.done}
@@ -572,6 +578,7 @@ const AddTask = (props) => {
                   },
                 }}
               />
+              {/* Label */}
               <label
                 htmlFor="done"
                 style={{
@@ -611,10 +618,13 @@ const AddTask = (props) => {
               Add Subtask
             </Button>
 
+            {/* Map All the Subtask */}
             {createTask.subtask.length !== 0 &&
               createTask.subtask.map((s, i) => {
                 return (
+                  // Per SubBox
                   <div key={i} className="subBox">
+                    {/* TextArea */}
                     <textarea
                       name="subtask"
                       id=""
@@ -630,6 +640,7 @@ const AddTask = (props) => {
                         letterSpacing: "0.5px",
                       }}
                     />
+                    {/* Delete Icon */}
                     <DeleteIcon
                       onClick={() => {
                         deleteSubTask(i);
@@ -643,12 +654,14 @@ const AddTask = (props) => {
                 );
               })}
 
+            {/* Fixed Box */}
             <div
               className="fixed"
               style={{
                 backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
               }}
             >
+              {/* If is it Edit then show Delete Button Other wise Not */}
               {editTask ? (
                 <Button
                   variant="outlined"
@@ -663,9 +676,11 @@ const AddTask = (props) => {
               ) : (
                 <></>
               )}
+
+              {/* Save Button */}
               <Button
                 variant="contained"
-                color="secondary"
+                color="success"
                 sx={{
                   m: 1,
                 }}
@@ -700,7 +715,10 @@ const AddTask = (props) => {
           </div>
         </>
       ) : (
-        <></>
+        <>
+          {/* If Token and UserId not present then reload the page */}
+          {window.location.reload()}
+        </>
       )}
     </>
   );

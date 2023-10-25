@@ -19,17 +19,11 @@ import Task from "../Task/Task";
 // Base URL
 import baseUrl from "../../Helper/BaseUrl";
 
-/* ------------- React Router Dom ------------- */
-// UseNavigate
-import { useNavigate } from "react-router-dom";
-
 /* ------------- Storage ------------- */
 // Cookies
 import Cookies from "js-cookie";
 
 /* ------------- Alerts ------------- */
-// Sweetalert
-import Swal from "sweetalert2";
 import AddTask from "../AddTask/AddTask";
 
 const Dashboard = () => {
@@ -40,9 +34,7 @@ const Dashboard = () => {
     window.location.href = "/";
   }
 
-  // UseNavigate
-  const navigate = useNavigate();
-
+  /* ------------- All UseState ------------- */
   // Task UseState
   const [task, setTask] = useState();
 
@@ -59,6 +51,35 @@ const Dashboard = () => {
     previousCount: 0,
   });
 
+  // Active Filter Buttons UseState
+  const [activeFilter, setActiveFilter] = useState(2);
+
+  // Mode UseState for Light and Dark Mode
+  const [mode, setMode] = useState(true);
+
+  // TaskList UseState
+  const [taskList, setTaskList] = useState("");
+
+  // Create Task UseState
+  const [createTask, setCreateTask] = useState({
+    title: "",
+    description: "",
+    list: "",
+    date: "",
+    subtask: [],
+    done: false,
+  });
+
+  // Edit Task UseState
+  const [editTask, setEditTask] = useState(false);
+
+  // Details Open/Close UseState
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
+  // Width UseState
+  const [w, setW] = useState(window.innerWidth);
+
+  // Count Format Func
   const handleCountFormat = (c) => {
     if (c >= 100) {
       return "99+";
@@ -68,6 +89,7 @@ const Dashboard = () => {
 
   // UserEffect for get the user task details
   useEffect(() => {
+    // Async Func
     const fetchUserTask = async () => {
       try {
         // Take the Token and Userid
@@ -87,6 +109,7 @@ const Dashboard = () => {
               const today = new Date();
               const todayDate = today.toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
+              // When data is present
               if (res.data && res.data.taskArr.length !== 0) {
                 const { taskArr } = res.data;
 
@@ -94,6 +117,7 @@ const Dashboard = () => {
                 let previousCount = 0;
                 let todayCount = 0;
 
+                // Count the Task
                 taskArr.forEach((task) => {
                   if (task.date > todayDate) {
                     upcomingCount++;
@@ -104,20 +128,25 @@ const Dashboard = () => {
                   }
                 });
 
+                // Set the State
                 setTaskCount({
                   upcomingCount: handleCountFormat(upcomingCount),
                   previousCount: handleCountFormat(previousCount),
                   todayCount: handleCountFormat(todayCount),
                 });
 
+                // Filtering the Task
                 const filteredTasks = taskArr.filter(
                   (task) => task.date === todayDate
                 );
+
+                // Set the Filter State with Today Default
                 setTaskFilter({
                   name: "Today",
                   count: todayCount,
                   filteredTasks,
                 });
+                // Set All task Data State
                 setTask(res.data);
               } else {
                 setTaskFilter({
@@ -138,26 +167,21 @@ const Dashboard = () => {
     fetchUserTask();
   }, []);
 
-  // console.log(taskFilter);
-  // Active Filter Buttons UseState
-  const [activeFilter, setActiveFilter] = useState(2);
+  // UseEffect to update the width state when the window is resized
+  useEffect(() => {
+    // Resize Func
+    const handleResize = () => {
+      setW(window.innerWidth);
+    };
 
-  // Mode UseState for Light and Dark Mode
-  const [mode, setMode] = useState(true);
+    // Add event listener for window resize event
+    window.addEventListener("resize", handleResize);
 
-  // TaskList UseState
-  const [taskList, setTaskList] = useState("");
-
-  const [createTask, setCreateTask] = useState({
-    title: "",
-    description: "",
-    list: "",
-    date: "",
-    subtask: [],
-    done: false,
-  });
-
-  const [editTask, setEditTask] = useState(false);
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -171,41 +195,70 @@ const Dashboard = () => {
               backgroundColor: mode ? "white" : "rgb(29, 29, 29)",
             }}
           >
+            {/* Details Component */}
             <Details
+              // Active Filter UseState Props
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}
+              // Task UseState Props
               task={task}
               setTask={setTask}
+              // Task Filter UseState Props
               taskFilter={taskFilter}
               setTaskFilter={setTaskFilter}
+              // Mode UseState Props
               mode={mode}
               setMode={setMode}
+              // Task Count UseState Props
               taskCount={taskCount}
+              // Task List UseState Props
               taskList={taskList}
               setTaskList={setTaskList}
+              // Details Open UseState
+              detailsOpen={detailsOpen}
+              setDetailsOpen={setDetailsOpen}
+              // Width UseState
+              w={w}
             />
 
+            {/* Task Component */}
             <Task
+              // Mode UseState Props
               mode={mode}
+              // Task Filter UseState Props
               taskFilter={taskFilter}
+              // Task List UseState Props
               taskList={taskList}
+              // Create Task UseState
               setCreateTask={setCreateTask}
+              // Edit Task UseState
               setEditTask={setEditTask}
+              // Details Open UseState
+              setDetailsOpen={setDetailsOpen}
+              // Width UseState
+              w={w}
             />
 
+            {/* Add Task Component */}
             <AddTask
+              // Mode UseState Props
               mode={mode}
+              // Create Task UseState Props
               createTask={createTask}
               setCreateTask={setCreateTask}
+              // Edit Task UseState Props
               editTask={editTask}
               setEditTask={setEditTask}
+              // Task List UseState Props
               taskList={taskList}
               setTaskList={setTaskList}
-              task={task}
+              // Task UseState Props
               setTask={setTask}
+              // Task Filter UseState Props
               setTaskFilter={setTaskFilter}
+              // Task Count UseState Props
               setTaskCount={setTaskCount}
-              setActiveFilter={setActiveFilter}
+              // Active Filter UseState Props
               activeFilter={activeFilter}
             />
           </div>

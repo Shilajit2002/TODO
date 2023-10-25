@@ -7,6 +7,9 @@ import "./Task.css";
 // Cookies
 import Cookies from "js-cookie";
 
+// Logo
+import logo from "../../Logo/logo.webp";
+
 /* ------------- MUI Icons ------------- */
 // Add Icon
 import AddIcon from "@mui/icons-material/Add";
@@ -16,6 +19,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // Sad Icon
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+// Menu Icon
+import MenuIcon from "@mui/icons-material/Menu";
 
 /* ------------- MUI Components ------------- */
 // Button
@@ -53,6 +58,10 @@ const Task = (props) => {
     setCreateTask,
     // Edit Task UseState
     setEditTask,
+    // Details Open UseState
+    setDetailsOpen,
+    // Width UseState
+    w,
   } = props;
 
   // Label for Checkbox
@@ -93,6 +102,21 @@ const Task = (props) => {
                 color: mode ? "rgb(65, 65, 65)" : "white",
               }}
             >
+              {/* Menu Icon */}
+              <MenuIcon
+                sx={{
+                  color: mode ? "black" : "white",
+                  fontSize: "1.5rem",
+                  mt:0,
+                  ml:0,
+                  mb:1,
+                  display: w <= 1000 ? "block" : "none",
+                }}
+                onClick={() => {
+                  setDetailsOpen(true);
+                }}
+              />
+
               {taskFilter.name}
               {/* Task Count Button */}
               <Button
@@ -183,7 +207,7 @@ const Task = (props) => {
                             }}
                           />
                           {/* Heading of Task Title*/}
-                          <span>{tf.title}</span>
+                          <span className="title">{tf.title}</span>
                           {/* Tooltip */}
                           <Tooltip
                             title="Open task"
@@ -302,6 +326,12 @@ const Task = (props) => {
                         />
                         {/* Heading */}
                         <p>No Task Found `~`</p>
+
+                          <img src={logo} alt="" style={{
+                            width:"200px",
+                            marginBottom:"10px"
+                          }}/>
+                          <h5>Create Your Task Now !!</h5>
                       </div>
                     </>
                   ) : (
