@@ -1,0 +1,189 @@
+.detailsBox {
+  width: 23%;
+  height: calc(100vh - 4vh);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+.detailsBox .names {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  position: sticky;
+  top: 0px;
+}
+
+.detailsBox .names img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.detailsBox .names h5 {
+  font-family: cursive;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.detailsBox .searchBar {
+  margin: 10px;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 0px 10px;
+  position: sticky;
+  top: 70px;
+}
+
+.detailsBox .searchBar input {
+  border-style: none;
+  background-color: transparent;
+  padding: 5px;
+  width: 100%;
+}
+
+.detailsBox .searchBar input::placeholder {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.detailsBox .searchBar input:focus {
+  outline: none;
+}
+
+.detailsBox :where(.tasksBar, .listsBar) {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.detailsBox :where(.tasksBar, .listsBar) p {
+  margin: 0;
+  padding: 0;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.detailsBox :where(.tasksBar .tfilter, .listsBar .lfilter) {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 500;
+  padding: 6px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.detailsBox .tasksBar .tfilter span:nth-child(odd) {
+  background-color: white;
+  color: rgb(65, 65, 65);
+  padding: 1px 10px;
+  border-radius: 5px;
+  margin-left: auto;
+  text-align: end;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.detailsBox .tasksBar .tfilter input[type="date"] {
+  width: 100%;
+  background-color: transparent;
+  border-style: none;
+}
+
+.detailsBox .tasksBar .tfilter input[type="date"]:focus {
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Calendar dropdown styling */
+.detailsBox
+  .tasksBar
+  .tfilter
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-color: rgb(238, 238, 238);
+  background-image: url("./Assets/calendar.jpg");
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.detailsBox .listsBar .lfilter span:nth-child(5) {
+  background-color: white;
+  color: rgb(65, 65, 65);
+  padding: 1px 10px;
+  border-radius: 5px;
+  text-align: end;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.detailsBox::-webkit-scrollbar {
+  display: none;
+}
+
+.detailsBox .downBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  align-self: flex-end;
+  position: sticky;
+  top: calc(100% - 170px);
+  bottom: 0;
+  margin: 5px 0;
+  padding-left: 15px;
+}
+
+.detailsBox .downBox .settings {
+  width: 95%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 500;
+  padding: 6px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.detailsBox .downBox .settings:nth-child(-n + 3):not(:last-child):hover {
+  background-color: rgba(160, 159, 159, 0.473);
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
+
+.detailsBox :where(.tasksBar .tfilter, .listsBar .lfilter):hover {
+  background-color: rgba(160, 159, 159, 0.473);
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
+
+.detailsBox :where(.tasksBar .active, .listsBar .active) {
+  background-color: rgba(160, 159, 159, 0.473);
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}

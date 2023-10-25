@@ -1,0 +1,82 @@
+.taskMainBox {
+  width: 46%;
+  height: calc(100vh - 4vh);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.taskMainBox .allTaskBox {
+  width: 100%;
+  height: calc(100vh - 4vh - 41.8px - 45.9px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+/* --------------- Webkit Scrollbar --------------- */
+.taskMainBox .allTaskBox::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 20px;
+}
+
+.taskMainBox .allTaskBox::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.taskMainBox .allTaskBox::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: 6px solid transparent;
+}
+
+.taskMainBox .allTaskBox:hover::-webkit-scrollbar-thumb {
+  background-color: #babbbb;
+  border-radius: 20px;
+  border: 6px solid transparent;
+}
+
+.taskMainBox .allTaskBox .perTaskBox {
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: 500;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.taskMainBox .allTaskBox .perTaskBox :where(.up, .down) {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.taskMainBox .allTaskBox .perTaskBox .down :where(.date, .subTask, .listN) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.taskMainBox .allTaskBox .perTaskBox .down .subTask span:nth-child(1) {
+  border-radius: 5px;
+  padding: 0px 10px;
+  margin-right: 10px;
+}

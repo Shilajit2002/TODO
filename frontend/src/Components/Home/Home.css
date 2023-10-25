@@ -1,0 +1,115 @@
+.homeBox {
+  width: 100%;
+  min-height: 100vh;
+  background: url("./Assets/background.jpeg") no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px 0;
+}
+
+.homeBox .heading {
+  font-family: "Courier New", Courier, monospace;
+  background-color: rgba(0, 0, 0, 0.705);
+  color: white;
+  letter-spacing: 0.5px;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.788) 0px 3px 8px;
+  text-align: center;
+}
+
+.homeBox .userBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.homeBox .userBox .left {
+  width: 50%;
+  background: linear-gradient(to bottom, #0069cc, #c20091);
+  position: relative;
+  left: 50px;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.685) 0px 5px 15px;
+}
+
+.homeBox .userBox .right {
+  width: 35%;
+  background-color: aliceblue;
+  position: relative;
+  top: 50px;
+  height: 530px;
+  right: 50px;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.521) 0px 5px 15px;
+  margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 1100px) {
+  .homeBox .userBox .left {
+    width: 90%;
+  }
+  .homeBox .userBox .right {
+    width: 65%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .homeBox .userBox .left {
+    width: 100%;
+    left: 20px;
+  }
+  .homeBox .userBox .right {
+    width: 90%;
+    height: 550px;
+    right: 20px;
+  }
+}
+
+@media only screen and (max-width: 660px) {
+  .homeBox .userBox {
+    flex-direction: column;
+  }
+  .homeBox .userBox .left {
+    width: 80%;
+    height: auto;
+    position: static;
+    left: 0px;
+    margin: 10px 0;
+  }
+  .homeBox .userBox .right {
+    width: 80%;
+    height: auto;
+    position: static;
+    top: 0px;
+    right: 0px;
+    margin: 10px 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .homeBox .userBox {
+    flex-direction: column;
+  }
+  .homeBox .userBox .left {
+    width: 92%;
+    height: auto;
+    position: static;
+    left: 0px;
+    margin: 10px 0;
+  }
+  .homeBox .userBox .right {
+    width: 92%;
+    height: auto;
+    position: static;
+    top: 0px;
+    right: 0px;
+    margin: 10px 0;
+  }
+}

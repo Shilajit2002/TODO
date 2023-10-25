@@ -1,0 +1,85 @@
+.signinContainer {
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.signinContainer img{
+  margin: 20px 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.signinContainer h4 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(29, 29, 29);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.signinContainer form {
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.signinContainer form .signInbox {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signinContainer form .signInbox .signInInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: aliceblue;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* SignUp Form TextField Label*/
+.signinContainer form .signInbox .signInInput > label {
+  color: rgb(20, 20, 20);
+  letter-spacing: 1px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signinContainer form p {
+  padding: 2px;
+  align-self: flex-start;
+  margin-left: 60px;
+  color: rgb(211, 7, 68);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.signinContainer form .signupin {
+  border-style: none;
+  border-radius: 20px;
+  padding: 5px 20px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  transition: 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.signinContainer form .signupin:hover {
+  background-color: aliceblue;
+  color: black;
+}

@@ -1,0 +1,117 @@
+.signupContainer {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.signupContainer img{
+  margin: 20px 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.signupContainer h4 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.signupContainer form {
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.signupContainer form .signUpbox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signupContainer form .signUpbox .signUpInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.37);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.267) 0px 8px 24px;
+}
+
+/* SignUp Form TextField Label*/
+.signupContainer form .signUpbox .signUpInput > label {
+  color: rgb(207, 207, 207);
+  letter-spacing: 1px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signupContainer form p {
+  padding: 2px;
+  align-self: flex-start;
+  margin-left: 40px;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+}
+
+.signupContainer form .signupup {
+  margin-bottom: 10px;
+  border-style: none;
+  border-radius: 20px;
+  padding: 5px 20px;
+  background-color: aliceblue;
+  color: black;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  transition: 0.3s ease;
+}
+
+.signupContainer form .signupup:hover {
+  background-color: black;
+  color: white;
+}
+
+.signupContainer form .signupin {
+  margin-top: 10px;
+  border-style: none;
+  border-radius: 20px;
+  padding: 5px 20px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  transition: 0.3s ease;
+}
+
+.signupContainer form .signupin:hover {
+  background-color: aliceblue;
+  color: black;
+}
+
+@media only screen and (max-width:800px){
+  .signupContainer {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width:660px){
+  .signupContainer {
+    width: 95%;
+  }
+}
