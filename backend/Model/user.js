@@ -25,6 +25,10 @@ const userSchema = mongoose.Schema({
     },
     pic: {
         type: String
+    },
+    mode: {
+        type: Boolean,
+        default: true
     }
 })
 

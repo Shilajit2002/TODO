@@ -40,6 +40,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 // Close Icon
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+// Add Photo Icon
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 /* ------------- MUI Components ------------- */
 // Style
@@ -186,6 +188,9 @@ const Details = (props) => {
   // Open List Dialog Box UseState
   const [openListDialog, setOpenListDialog] = useState(false);
 
+  // Open Profile Dialog Box UseState
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
+
   // UserEffect for get the user details
   useEffect(() => {
     // Take the Token and Userid
@@ -204,6 +209,7 @@ const Details = (props) => {
         .then((res) => {
           // Set the data of the User
           setUser(res.data);
+          setMode(res.data.mode);
         })
         .catch((err) => {
           // console.log(err);
@@ -612,6 +618,94 @@ const Details = (props) => {
     return c;
   };
 
+  // Open Profile Dialog Func
+  const handleClickOpenProfileDialog = () => {
+    setOpenProfileDialog(true);
+  };
+
+  // Close Profile Dialog Func
+  const handleCloseProfileDialog = () => {
+    setOpenProfileDialog(false);
+  };
+
+  const handleProfileEditFunc = () => {
+    // Take the Token and Userid
+    const token = Cookies.get("token");
+    const userid = Cookies.get("userid");
+
+    if (token && userid) {
+      // Check if the data is fill or not
+      if (user.fullname !== "" && user.email !== "") {
+        // Send to the Backend
+        axios
+          .put(`${baseUrl}/api/user/edit-details/${userid}`, user, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            // Set Profile Data
+            console.log(res.data);
+            setUser(res.data);
+            setMode(res.data.mode);
+
+            // Success Result
+            setSnack({
+              open: true,
+              message: "** Profile Updated **",
+              severity: "success",
+            });
+          })
+          .catch((err) => {
+            // Error
+            setSnack({
+              open: true,
+              message: "Server Error !!",
+              severity: "error",
+            });
+          });
+      } else {
+        setSnack({
+          open: true,
+          message: "Please fill the data !!",
+          severity: "warning",
+        });
+      }
+    } else {
+      window.location.href = "/";
+    }
+  };
+
+  const handleModeChangeFunc = () => {
+    // Take the Token and Userid
+    const token = Cookies.get("token");
+    const userid = Cookies.get("userid");
+
+    if (token && userid) {
+      // Send to the Backend
+      axios
+        .put(`${baseUrl}/api/user/edit-details/${userid}`, user, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          // Set Profile Data
+          setMode(res.data.mode);
+        })
+        .catch((err) => {
+          // Error
+          setSnack({
+            open: true,
+            message: "Server Error !!",
+            severity: "error",
+          });
+        });
+    } else {
+      window.location.href = "/";
+    }
+  };
+
   return (
     <>
       {/* If Token and UserId present then open Details Page */}
@@ -998,6 +1092,7 @@ const Details = (props) => {
                 style={{
                   color: mode ? "rgb(65, 65, 65)" : "white",
                 }}
+                onClick={() => handleClickOpenProfileDialog()}
               >
                 {/* Profile Icon */}
                 <AccountCircleIcon
@@ -1043,10 +1138,15 @@ const Details = (props) => {
                   control={
                     // Material Switch for Light and Dark Mode
                     <MaterialUISwitch
-                      defaultChecked
+                      checked={mode}
                       value={mode}
                       onChange={(e) => {
                         setMode(e.target.checked);
+                        setUser({
+                          ...user,
+                          mode: e.target.checked,
+                        });
+                        handleModeChangeFunc();
                       }}
                     />
                   }
@@ -1056,14 +1156,23 @@ const Details = (props) => {
               </div>
             </div>
 
-            {/* Dialog Box */}
+            {/* List Dialog Box */}
             <Dialog open={openListDialog} onClose={handleCloseListDialog}>
               {/* Title */}
-              <DialogTitle>
+              <DialogTitle
+                sx={{
+                  backgroundColor: mode ? "white" : "#232B2B",
+                  color: mode ? "black" : "white",
+                }}
+              >
                 {listData.edit ? "Update List" : "Add New List"}
               </DialogTitle>
               {/* Content */}
-              <DialogContent>
+              <DialogContent
+                sx={{
+                  backgroundColor: mode ? "white" : "#232B2B",
+                }}
+              >
                 {/* Add List Text Filed */}
                 <TextField
                   id="name"
@@ -1071,9 +1180,19 @@ const Details = (props) => {
                   name="name"
                   type="text"
                   fullWidth
-                  variant="standard"
                   color="primary"
                   value={listData.name}
+                  variant="filled"
+                  style={{
+                    backgroundColor: mode ? "" : "white",
+                  }}
+                  InputProps={{
+                    style: {
+                      color: "black",
+                      fontWeight: "500",
+                      letterSpacing: "0.5px",
+                    },
+                  }}
                   onChange={(e) => {
                     setListData({
                       ...listData,
@@ -1087,7 +1206,7 @@ const Details = (props) => {
                   style={{
                     display: "block",
                     marginTop: "10px",
-                    color: "rgb(65, 65, 65)",
+                    color: mode ? "rgb(65, 65, 65)" : "white",
                     cursor: "pointer",
                   }}
                 >
@@ -1142,6 +1261,141 @@ const Details = (props) => {
                   size="small"
                 >
                   Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+            {/* Profile Dialog Box */}
+            <Dialog open={openProfileDialog} onClose={handleCloseProfileDialog}>
+              {/* Content */}
+              <DialogContent
+                sx={{
+                  backgroundColor: mode ? "white" : "#232B2B",
+                }}
+              >
+                <div className="profDetails">
+                  {user ? (
+                    <>
+                      <img src={user.pic ? user.pic : profilePic} alt="" />
+                      {/* Picture Upload Button */}
+                      <p>
+                        <input
+                          type="file"
+                          id="file"
+                          onChange={(e) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(e.target.files[0]);
+                            reader.onload = function () {
+                              const url = reader.result;
+                              setUser({
+                                ...user,
+                                pic: url,
+                              });
+                            };
+                          }}
+                        />
+                        <label htmlFor="file">
+                          <AddAPhotoIcon
+                            sx={{
+                              fontSize: "1.5rem",
+                              color: "white",
+                            }}
+                          />
+                        </label>
+                      </p>
+                      <TextField
+                        label="Full Name"
+                        color="secondary"
+                        type="text"
+                        name="fullname"
+                        value={user.fullname}
+                        aria-readonly="true"
+                        className="profInput"
+                        variant="filled"
+                        style={{
+                          backgroundColor: mode ? "" : "white",
+                        }}
+                        InputProps={{
+                          style: {
+                            color: "black",
+                            fontWeight: "500",
+                            letterSpacing: "0.5px",
+                          },
+                        }}
+                        onChange={(e) => {
+                          setUser({
+                            ...user,
+                            fullname: e.target.value,
+                          });
+                        }}
+                      />
+                      <TextField
+                        label="Email Id"
+                        color="secondary"
+                        type="text"
+                        name="email"
+                        value={user.email}
+                        aria-readonly="true"
+                        className="profInput"
+                        variant="filled"
+                        style={{
+                          backgroundColor: mode ? "" : "white",
+                        }}
+                        InputProps={{
+                          style: {
+                            color: "black",
+                            fontWeight: "500",
+                            letterSpacing: "0.5px",
+                          },
+                        }}
+                      />
+
+                      <TextField
+                        label="All Task"
+                        color="secondary"
+                        type="text"
+                        name="task"
+                        value={task ? `${task.taskArr.length}` : "0"}
+                        aria-readonly="true"
+                        className="profInput"
+                        variant="filled"
+                        style={{
+                          backgroundColor: mode ? "" : "white",
+                        }}
+                        InputProps={{
+                          style: {
+                            color: "black",
+                            fontWeight: "500",
+                            letterSpacing: "0.5px",
+                          },
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </DialogContent>
+              {/* Action Buton */}
+              <DialogActions>
+                {/* Save Button */}
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={() => {
+                    handleProfileEditFunc();
+                  }}
+                >
+                  Save
+                </Button>
+                {/* Cancel Button */}
+                <Button
+                  onClick={handleCloseProfileDialog}
+                  color="error"
+                  size="small"
+                >
+                  Close
                 </Button>
               </DialogActions>
             </Dialog>
