@@ -23,6 +23,9 @@ import baseUrl from "../../Helper/BaseUrl";
 // Cookies
 import Cookies from "js-cookie";
 
+/* ------------- MUI Components ------------- */
+import Backdrop from "@mui/material/Backdrop";
+
 /* ------------- Alerts ------------- */
 import AddTask from "../AddTask/AddTask";
 
@@ -78,6 +81,9 @@ const Dashboard = () => {
 
   // Width UseState
   const [w, setW] = useState(window.innerWidth);
+
+  //  Open Loader UseState
+  const [openLoader, setOpenLoader] = useState(false);
 
   // Count Format Func
   const handleCountFormat = (c) => {
@@ -219,6 +225,9 @@ const Dashboard = () => {
               setDetailsOpen={setDetailsOpen}
               // Width UseState
               w={w}
+              // Loader UseState
+              openLoader={openLoader}
+              setOpenLoader={setOpenLoader}
             />
 
             {/* Task Component */}
@@ -260,7 +269,23 @@ const Dashboard = () => {
               setTaskCount={setTaskCount}
               // Active Filter UseState Props
               activeFilter={activeFilter}
+              // Loader UseState
+              openLoader={openLoader}
+              setOpenLoader={setOpenLoader}
             />
+
+            {/* BackDrop */}
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={openLoader}
+            >
+              {/* Loader Dot */}
+              <div className="loaderDot">
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+              </div>
+            </Backdrop>
           </div>
         </>
       ) : (

@@ -153,6 +153,8 @@ const Details = (props) => {
     setDetailsOpen,
     // Width UseState
     w,
+    // Loader UseState
+    setOpenLoader,
   } = props;
 
   /* ------------- All UseState ------------- */
@@ -216,7 +218,7 @@ const Details = (props) => {
           window.location.reload();
         });
     }
-  }, []);
+  }, [setMode]);
 
   // UserEffect for get the user list details
   useEffect(() => {
@@ -323,7 +325,7 @@ const Details = (props) => {
     // Filter the Task as per Task Value
     if (task && task.taskArr.length !== 0) {
       filteredTasks = task.taskArr.filter((t) =>
-        t.title.toLowerCase().includes(value)
+        t.title.toLowerCase().includes(value.toLowerCase())
       );
     }
 
@@ -402,6 +404,8 @@ const Details = (props) => {
         listData.name.trim("") !== "" &&
         listData.name.length <= 20
       ) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .post(`${baseUrl}/api/list/create-list/${userid}`, listData, {
@@ -419,6 +423,8 @@ const Details = (props) => {
             //  Set List Data
             setTaskList(res.data);
 
+            setOpenLoader(false);
+
             // Success Result
             setSnack({
               open: true,
@@ -427,6 +433,8 @@ const Details = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Set Error
             setSnack({
               open: true,
@@ -467,6 +475,8 @@ const Details = (props) => {
         listData.name.trim("") !== "" &&
         listData.name.length <= 20
       ) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .put(
@@ -516,8 +526,12 @@ const Details = (props) => {
                 }
               })
               .catch((err) => {
+                setOpenLoader(false);
+
                 window.location.reload();
               });
+            setOpenLoader(false);
+
             // If Success
             setListData({
               name: "",
@@ -533,6 +547,8 @@ const Details = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Error
             setSnack({
               open: true,
@@ -568,6 +584,8 @@ const Details = (props) => {
 
     if (token && userid) {
       if (lc === 0) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .delete(`${baseUrl}/api/list/delete-list/${userid}/${lid}`, {
@@ -581,6 +599,9 @@ const Details = (props) => {
 
             // Default active the Today Div Box
             handleActiveFilterChange(2);
+
+            setOpenLoader(false);
+
             // Success Result
             setSnack({
               open: true,
@@ -589,6 +610,8 @@ const Details = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Set Error
             setSnack({
               open: true,
@@ -628,6 +651,7 @@ const Details = (props) => {
     setOpenProfileDialog(false);
   };
 
+  // Profile Edit Func
   const handleProfileEditFunc = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -636,6 +660,8 @@ const Details = (props) => {
     if (token && userid) {
       // Check if the data is fill or not
       if (user.fullname !== "" && user.email !== "") {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .put(`${baseUrl}/api/user/edit-details/${userid}`, user, {
@@ -645,9 +671,10 @@ const Details = (props) => {
           })
           .then((res) => {
             // Set Profile Data
-            console.log(res.data);
             setUser(res.data);
             setMode(res.data.mode);
+
+            setOpenLoader(false);
 
             // Success Result
             setSnack({
@@ -657,6 +684,8 @@ const Details = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Error
             setSnack({
               open: true,
@@ -676,6 +705,7 @@ const Details = (props) => {
     }
   };
 
+  // Mode Change Func
   const handleModeChangeFunc = () => {
     // Take the Token and Userid
     const token = Cookies.get("token");
@@ -690,7 +720,8 @@ const Details = (props) => {
           },
         })
         .then((res) => {
-          // Set Profile Data
+          // Set Mode Data
+          setUser(res.data);
           setMode(res.data.mode);
         })
         .catch((err) => {
@@ -1273,9 +1304,11 @@ const Details = (props) => {
                   backgroundColor: mode ? "white" : "#232B2B",
                 }}
               >
+                {/* Profile Details */}
                 <div className="profDetails">
                   {user ? (
                     <>
+                      {/* Profile Pic */}
                       <img src={user.pic ? user.pic : profilePic} alt="" />
                       {/* Picture Upload Button */}
                       <p>
@@ -1295,6 +1328,7 @@ const Details = (props) => {
                           }}
                         />
                         <label htmlFor="file">
+                          {/* Add Icon */}
                           <AddAPhotoIcon
                             sx={{
                               fontSize: "1.5rem",
@@ -1303,6 +1337,8 @@ const Details = (props) => {
                           />
                         </label>
                       </p>
+
+                      {/* Full Name */}
                       <TextField
                         label="Full Name"
                         color="secondary"
@@ -1329,6 +1365,8 @@ const Details = (props) => {
                           });
                         }}
                       />
+
+                      {/* Email */}
                       <TextField
                         label="Email Id"
                         color="secondary"
@@ -1350,6 +1388,7 @@ const Details = (props) => {
                         }}
                       />
 
+                      {/* All Task */}
                       <TextField
                         label="All Task"
                         color="secondary"
@@ -1385,6 +1424,7 @@ const Details = (props) => {
                   size="small"
                   onClick={() => {
                     handleProfileEditFunc();
+                    handleCloseProfileDialog();
                   }}
                 >
                   Save

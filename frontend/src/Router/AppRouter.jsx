@@ -2,14 +2,17 @@
 import React from "react";
 
 /* ------------- React Router Dom ------------- */
-// Import Router,Route,Routes
+// Router,Route,Routes
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 /* ------------- Components ------------- */
-// Import Home Component
+// Home Component
 import Home from "../Components/Home/Home";
-// Import Dashboard Component
+// Dashboard Component
 import Dashboard from "../Components/Dashboard/Dashboard";
+// Not Found Component
+import NotFound from "../Components/NotFound/NotFound";
+
 const AppRouter = () => {
   return (
     <>
@@ -19,6 +22,8 @@ const AppRouter = () => {
           <Route exact path="/" element={<Home />} />
           {/* Dashboard Route */}
           <Route exact path="/dashboard" element={<Dashboard />} />
+          {/* Not Found Route */}
+          <Route exact path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>

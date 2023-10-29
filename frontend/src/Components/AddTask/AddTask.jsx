@@ -72,6 +72,8 @@ const AddTask = (props) => {
     setTaskCount,
     // Active Filter UseState Props
     activeFilter,
+    // Loader UseState
+    setOpenLoader,
   } = props;
 
   /* ------------- All UseState ------------- */
@@ -285,6 +287,8 @@ const AddTask = (props) => {
         createTask.list !== "" &&
         createTask.date !== ""
       ) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .post(`${baseUrl}/api/task/create-task/${userid}`, createTask, {
@@ -298,6 +302,8 @@ const AddTask = (props) => {
             // Count Func
             countFunc(res);
 
+            setOpenLoader(false);
+
             // Success Result
             setSnack({
               open: true,
@@ -306,6 +312,8 @@ const AddTask = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Set Error
             setSnack({
               open: true,
@@ -339,6 +347,8 @@ const AddTask = (props) => {
         createTask.list !== "" &&
         createTask.date !== ""
       ) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .put(`${baseUrl}/api/task/edit-task/${userid}`, createTask, {
@@ -352,6 +362,8 @@ const AddTask = (props) => {
             // Count Func
             countFunc(res);
 
+            setOpenLoader(false);
+
             // Success Result
             setSnack({
               open: true,
@@ -360,6 +372,8 @@ const AddTask = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Set Error
             setSnack({
               open: true,
@@ -388,6 +402,8 @@ const AddTask = (props) => {
     if (token && userid) {
       // Check if the data is fill or not
       if (createTask._id) {
+        setOpenLoader(true);
+
         // Send to the Backend
         axios
           .delete(
@@ -404,6 +420,8 @@ const AddTask = (props) => {
             // Count Func
             countFunc(res);
 
+            setOpenLoader(false);
+
             // Success Result
             setSnack({
               open: true,
@@ -412,6 +430,8 @@ const AddTask = (props) => {
             });
           })
           .catch((err) => {
+            setOpenLoader(false);
+
             // Set Error
             setSnack({
               open: true,
