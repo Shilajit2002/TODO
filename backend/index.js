@@ -16,6 +16,9 @@ const app = express();
 // Get the Port
 const port = process.env.PORT || 5000;
 
+// Backend URL
+const bUrl = process.env.BACKEND_URL;
+
 // Set up body-parser middleware to parse JSON and urlencoded data
 // Increase Payload Size Limit
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -36,5 +39,6 @@ app.all("*", (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Server Running at http://localhost:${port}`);
+    console.log(`Server Running at Port ${port}`);
+    console.log(`Server Running at ${bUrl}`);
 })
