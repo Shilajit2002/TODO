@@ -14,6 +14,8 @@ import Home from "../Home/Home";
 import Details from "../Details/Details";
 // Task Page
 import Task from "../Task/Task";
+// Add Task Page
+import AddTask from "../AddTask/AddTask";
 
 /* ------------- Backend Url ------------- */
 // Base URL
@@ -24,10 +26,8 @@ import baseUrl from "../../Helper/BaseUrl";
 import Cookies from "js-cookie";
 
 /* ------------- MUI Components ------------- */
+// Backdrop
 import Backdrop from "@mui/material/Backdrop";
-
-/* ------------- Alerts ------------- */
-import AddTask from "../AddTask/AddTask";
 
 const Dashboard = () => {
   // Take the token and userid if it is not peresent redirect to SignIn page

@@ -22,6 +22,10 @@ import Box from "@mui/material/Box";
 // Input Adorment
 import InputAdornment from "@mui/material/InputAdornment";
 
+/* ------------- MUI Components ------------- */
+// Backdrop
+import Backdrop from "@mui/material/Backdrop";
+
 /* ------------- MUI Icons ------------- */
 // Person Icon
 import PersonIcon from "@mui/icons-material/Person";
@@ -104,6 +108,9 @@ const SignUp = () => {
     });
   };
 
+  //  Open Loader UseState
+  const [openLoader, setOpenLoader] = useState(false);
+
   // Handle Form Submit Func
   const handleSignUp = (event) => {
     // Stop Reloading the Page when Submiting the Form
@@ -118,6 +125,8 @@ const SignUp = () => {
       user.password !== "" &&
       alert.passAlert === ""
     ) {
+      setOpenLoader(true);
+
       // Send to the Backend of User Form data
       axios
         .post(`${baseUrl}/api/user/register`, user)
@@ -129,6 +138,8 @@ const SignUp = () => {
             password: "",
           });
 
+          setOpenLoader(false);
+
           // Success Result
           setSnack({
             open: true,
@@ -137,6 +148,8 @@ const SignUp = () => {
           });
         })
         .catch((err) => {
+          setOpenLoader(false);
+
           // If Error then show the error message
           if (err.response && err.response.data === "User Already Registered") {
             setSnack({
@@ -380,6 +393,19 @@ const SignUp = () => {
             <strong>{snack.message}</strong>
           </MuiAlert>
         </Snackbar>
+
+        {/* BackDrop */}
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openLoader}
+        >
+          {/* Loader Dot */}
+          <div className="loaderDot">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+        </Backdrop>
       </div>
     </>
   );

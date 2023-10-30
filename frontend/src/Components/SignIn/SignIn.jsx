@@ -30,6 +30,10 @@ import Box from "@mui/material/Box";
 // Input Adorment
 import InputAdornment from "@mui/material/InputAdornment";
 
+/* ------------- MUI Components ------------- */
+// Backdrop
+import Backdrop from "@mui/material/Backdrop";
+
 /* ------------- MUI Icons ------------- */
 // Email Icon
 import EmailIcon from "@mui/icons-material/Email";
@@ -51,12 +55,15 @@ import MuiAlert from "@mui/material/Alert";
 const SignIn = () => {
   // UseNavigate
   const navigate = useNavigate();
-  
+
   // Password Show,Hide UseState
   const [hidePass, setHidePass] = useState({
     type: "password",
     flag: true,
   });
+
+  //  Open Loader UseState
+  const [openLoader, setOpenLoader] = useState(false);
 
   // Password See & Hide Func
   const passwordFunc = () => {
@@ -123,6 +130,8 @@ const SignIn = () => {
       user.password !== "" &&
       alert.passAlert === ""
     ) {
+      setOpenLoader(true);
+
       // Send to the Backend of User Form data
       axios
         .post(`${baseUrl}/api/user/login`, user)
@@ -136,9 +145,13 @@ const SignIn = () => {
           Cookies.set("token", req.data.token);
           Cookies.set("userid", req.data.userid);
 
+          setOpenLoader(false);
+
           navigate("/dashboard");
         })
         .catch((err) => {
+          setOpenLoader(false);
+
           // console.log(err);
           if (err.response) {
             // If Error then show the error message
@@ -295,7 +308,7 @@ const SignIn = () => {
                   setAlert({
                     ...alert,
                     passAlert:
-                      "Password must be 8+ characters with lowercase,nInpercase, number, and special character.",
+                      "Password must be 8+ characters with lowercase, uppercase, number, and special character.",
                   });
                 } else {
                   setAlert({
@@ -340,6 +353,19 @@ const SignIn = () => {
             <strong>{snack.message}</strong>
           </MuiAlert>
         </Snackbar>
+
+        {/* BackDrop */}
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openLoader}
+        >
+          {/* Loader Dot */}
+          <div className="loaderDot">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+        </Backdrop>
       </div>
     </>
   );
