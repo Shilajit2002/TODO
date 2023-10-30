@@ -218,7 +218,7 @@ const Details = (props) => {
           window.location.reload();
         });
     }
-  }, [setMode]);
+  }, []);
 
   // UserEffect for get the user list details
   useEffect(() => {
@@ -705,6 +705,11 @@ const Details = (props) => {
     }
   };
 
+  // UseEffect For Mode Change Func Call
+  useEffect(() => {
+    handleModeChangeFunc();
+  }, [mode]);
+
   // Mode Change Func
   const handleModeChangeFunc = () => {
     // Take the Token and Userid
@@ -734,6 +739,42 @@ const Details = (props) => {
         });
     } else {
       window.location.href = "/";
+    }
+  };
+
+  // Profile Upload Func
+  const handleProfileUpload = (e) => {
+    const maxSizeInBytes = 2 * 1024 * 1024; // 2MB in bytes
+
+    // Check the Image is less than 2MB or not
+    if (e.target.files[0].size > maxSizeInBytes) {
+      // Warning
+      setSnack({
+        open: true,
+        message: "Image should be less than 2MB !!",
+        severity: "warning",
+      });
+    }
+    // Check the File is an Image or not
+    else if (!e.target.files[0].type.includes("image/")) {
+      // Warning
+      setSnack({
+        open: true,
+        message: "Only image is allowed !!",
+        severity: "warning",
+      });
+    }
+    // Save the Image
+    else {
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = function () {
+        const url = reader.result;
+        setUser({
+          ...user,
+          pic: url,
+        });
+      };
     }
   };
 
@@ -1177,7 +1218,6 @@ const Details = (props) => {
                           ...user,
                           mode: e.target.checked,
                         });
-                        handleModeChangeFunc();
                       }}
                     />
                   }
@@ -1316,15 +1356,7 @@ const Details = (props) => {
                           type="file"
                           id="file"
                           onChange={(e) => {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(e.target.files[0]);
-                            reader.onload = function () {
-                              const url = reader.result;
-                              setUser({
-                                ...user,
-                                pic: url,
-                              });
-                            };
+                            handleProfileUpload(e);
                           }}
                         />
                         <label htmlFor="file">
@@ -1411,7 +1443,32 @@ const Details = (props) => {
                       />
                     </>
                   ) : (
-                    <></>
+                    <>
+                      {/* Skeleton For Logo */}
+                      <Skeleton
+                        variant="circular"
+                        sx={{
+                          width: "180px",
+                          height: "180px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                      {/* Text Filed Skeleton */}
+                      {[0, 1, 2].map((s, i) => {
+                        return (
+                          <Skeleton
+                            key={i}
+                            variant="rectangular"
+                            height={50}
+                            sx={{
+                              width: "100%",
+                              borderRadius: "5px",
+                              m: 1,
+                            }}
+                          />
+                        );
+                      })}
+                    </>
                   )}
                 </div>
               </DialogContent>

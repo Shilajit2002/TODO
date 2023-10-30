@@ -138,7 +138,7 @@ router.put("/edit-details/:id", auth, async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not if exists then update this
-            let user = await User.findByIdAndUpdate({ _id: req.params.id }, { fullname: req.body.fullname, pic: req.body.pic, mode: !req.body.mode }, { new: true });
+            let user = await User.findByIdAndUpdate({ _id: req.params.id }, { fullname: req.body.fullname, pic: req.body.pic, mode: req.body.mode }, { new: true });
             // If not exists
             if (!user) {
                 // Set Not Found Status
