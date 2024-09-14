@@ -1,32 +1,44 @@
-// React
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Cookies from "js-cookie";
 
-/* ------------- React Router Dom ------------- */
-// Router,Route,Routes
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-/* ------------- Components ------------- */
-// Home Component
 import Home from "../Components/Home/Home";
-// Dashboard Component
 import Dashboard from "../Components/Dashboard/Dashboard";
-// Not Found Component
 import NotFound from "../Components/NotFound/NotFound";
+
+// ProtectedRoute Component
+const ProtectedRoute = ({ children }) => {
+  const authed = Cookies.get("token"); // get the token from cookies
+
+  return authed ? children : <Navigate to="/" replace />;
+};
 
 const AppRouter = () => {
   return (
-    <>
-      <Router>
-        <Routes>
-          {/* Home Route */}
-          <Route exact path="/" element={<Home />} />
-          {/* Dashboard Route */}
-          <Route exact path="/dashboard" element={<Dashboard />} />
-          {/* Not Found Route */}
-          <Route exact path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </>
+    <Router>
+      <Routes>
+        {/* Home Route */}
+        <Route exact path="/" element={<Home />} />
+
+        {/* Protected Dashboard Route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Not Found Route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 };
 

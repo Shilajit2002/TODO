@@ -8,8 +8,6 @@ import "./Dashboard.css";
 import axios from "axios";
 
 /* ------------- Components ------------- */
-// Home Page
-import Home from "../Home/Home";
 // Details Page
 import Details from "../Details/Details";
 // Task Page
@@ -30,13 +28,6 @@ import Cookies from "js-cookie";
 import Backdrop from "@mui/material/Backdrop";
 
 const Dashboard = () => {
-  // Take the token and userid if it is not peresent redirect to SignIn page
-  if (!(Cookies.get("token") && Cookies.get("userid"))) {
-    Cookies.remove("token");
-    Cookies.remove("userid");
-    window.location.href = "/";
-  }
-
   /* ------------- All UseState ------------- */
   // Task UseState
   const [task, setTask] = useState();
@@ -106,7 +97,7 @@ const Dashboard = () => {
         if (token && userid) {
           // Axios Get Request from Backend
           axios
-            .get(`${baseUrl}/api/task/get-all-task/${userid}`, {
+            .get(`${baseUrl}/tasks/get-all-task/${userid}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -191,109 +182,99 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* If Token and UserId present then open dashboard */}
-      {Cookies.get("token") && Cookies.get("userid") ? (
-        <>
-          {/* Dashboard Main Box */}
-          <div
-            className="dahsboardMainBox"
-            style={{
-              backgroundColor: mode ? "white" : "rgb(29, 29, 29)",
-            }}
-          >
-            {/* Details Component */}
-            <Details
-              // Active Filter UseState Props
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-              // Task UseState Props
-              task={task}
-              setTask={setTask}
-              // Task Filter UseState Props
-              taskFilter={taskFilter}
-              setTaskFilter={setTaskFilter}
-              // Mode UseState Props
-              mode={mode}
-              setMode={setMode}
-              // Task Count UseState Props
-              taskCount={taskCount}
-              // Task List UseState Props
-              taskList={taskList}
-              setTaskList={setTaskList}
-              // Details Open UseState
-              detailsOpen={detailsOpen}
-              setDetailsOpen={setDetailsOpen}
-              // Width UseState
-              w={w}
-              // Loader UseState
-              openLoader={openLoader}
-              setOpenLoader={setOpenLoader}
-            />
+      {/* Dashboard Main Box */}
+      <div
+        className="dahsboardMainBox"
+        style={{
+          backgroundColor: mode ? "white" : "rgb(29, 29, 29)",
+        }}
+      >
+        {/* Details Component */}
+        <Details
+          // Active Filter UseState Props
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+          // Task UseState Props
+          task={task}
+          setTask={setTask}
+          // Task Filter UseState Props
+          taskFilter={taskFilter}
+          setTaskFilter={setTaskFilter}
+          // Mode UseState Props
+          mode={mode}
+          setMode={setMode}
+          // Task Count UseState Props
+          taskCount={taskCount}
+          // Task List UseState Props
+          taskList={taskList}
+          setTaskList={setTaskList}
+          // Details Open UseState
+          detailsOpen={detailsOpen}
+          setDetailsOpen={setDetailsOpen}
+          // Width UseState
+          w={w}
+          // Loader UseState
+          openLoader={openLoader}
+          setOpenLoader={setOpenLoader}
+        />
 
-            {/* Task Component */}
-            <Task
-              // Mode UseState Props
-              mode={mode}
-              // Task Filter UseState Props
-              taskFilter={taskFilter}
-              // Task List UseState Props
-              taskList={taskList}
-              // Create Task UseState
-              setCreateTask={setCreateTask}
-              // Edit Task UseState
-              setEditTask={setEditTask}
-              // Details Open UseState
-              setDetailsOpen={setDetailsOpen}
-              // Width UseState
-              w={w}
-            />
+        {/* Task Component */}
+        <Task
+          // Mode UseState Props
+          mode={mode}
+          // Task Filter UseState Props
+          taskFilter={taskFilter}
+          // Task List UseState Props
+          taskList={taskList}
+          // Create Task UseState
+          setCreateTask={setCreateTask}
+          // Edit Task UseState
+          setEditTask={setEditTask}
+          // Details Open UseState
+          setDetailsOpen={setDetailsOpen}
+          // Width UseState
+          w={w}
+        />
 
-            {/* Add Task Component */}
-            <AddTask
-              // Mode UseState Props
-              mode={mode}
-              // Create Task UseState Props
-              createTask={createTask}
-              setCreateTask={setCreateTask}
-              // Edit Task UseState Props
-              editTask={editTask}
-              setEditTask={setEditTask}
-              // Task List UseState Props
-              taskList={taskList}
-              setTaskList={setTaskList}
-              // Task UseState Props
-              setTask={setTask}
-              // Task Filter UseState Props
-              setTaskFilter={setTaskFilter}
-              // Task Count UseState Props
-              setTaskCount={setTaskCount}
-              // Active Filter UseState Props
-              activeFilter={activeFilter}
-              // Loader UseState
-              openLoader={openLoader}
-              setOpenLoader={setOpenLoader}
-            />
+        {/* Add Task Component */}
+        <AddTask
+          // Mode UseState Props
+          mode={mode}
+          // Create Task UseState Props
+          createTask={createTask}
+          setCreateTask={setCreateTask}
+          // Edit Task UseState Props
+          editTask={editTask}
+          setEditTask={setEditTask}
+          // Task List UseState Props
+          taskList={taskList}
+          setTaskList={setTaskList}
+          // Task UseState Props
+          setTask={setTask}
+          // Task Filter UseState Props
+          setTaskFilter={setTaskFilter}
+          // Task Count UseState Props
+          setTaskCount={setTaskCount}
+          // Active Filter UseState Props
+          activeFilter={activeFilter}
+          // Loader UseState
+          openLoader={openLoader}
+          setOpenLoader={setOpenLoader}
+        />
 
-            {/* BackDrop */}
-            <Backdrop
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={openLoader}
-            >
-              {/* Loader Dot */}
-              <div className="loaderDot">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-              </div>
-            </Backdrop>
+        {/* BackDrop */}
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openLoader}
+        >
+          {/* Loader Dot */}
+          <div className="loaderDot">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
           </div>
-        </>
-      ) : (
-        <>
-          {/* If Token and UserId not present then redirect SignIn */}
-          <Home />
-        </>
-      )}
+        </Backdrop>
+      </div>
     </>
   );
 };

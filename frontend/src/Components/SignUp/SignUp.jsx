@@ -129,7 +129,7 @@ const SignUp = () => {
 
       // Send to the Backend of User Form data
       axios
-        .post(`${baseUrl}/api/user/register`, user)
+        .post(`${baseUrl}/users/register`, user)
         .then((req) => {
           // If Success then Set User Null
           setUser({

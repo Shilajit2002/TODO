@@ -1,20 +1,12 @@
-// Import Express
-const express = require('express');
-// Import Router
-const router = new express.Router();
-
 // Import User Collection/Model
-const User = require("../Model/user");
-// Import Task Collection/Model
-const Task = require("../Model/task");
+const User = require("../Models/user.model");
 // Import List Collection/Model
-const List = require("../Model/list");
-
-// Import Authentication
-const auth = require('../Middleware/auth');
+const List = require("../Models/list.model");
+// Import Task Collection/Model
+const Task = require("../Models/task.model");
 
 // Create Task API
-router.post("/create-task/:id", auth, async (req, res) => {
+const createTask = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -81,10 +73,10 @@ router.post("/create-task/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // All Task API
-router.get("/get-all-task/:id", auth, async (req, res) => {
+const getAllTask = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -108,10 +100,10 @@ router.get("/get-all-task/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Perticular Task API
-router.get("/get-per-task/:id/:taskId", auth, async (req, res) => {
+const getPerTask = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -147,10 +139,10 @@ router.get("/get-per-task/:id/:taskId", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Edit Task API
-router.put("/edit-task/:id", auth, async (req, res) => {
+const editTask = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -213,10 +205,10 @@ router.put("/edit-task/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Delete Task API
-router.delete("/delete-task/:id/:taskId", auth, async (req, res) => {
+const deleteTask = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -269,7 +261,7 @@ router.delete("/delete-task/:id/:taskId", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Exports the Router
-module.exports = router;
+module.exports = { createTask, getAllTask, getPerTask, editTask, deleteTask };

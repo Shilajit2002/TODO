@@ -44,13 +44,6 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const AddTask = (props) => {
-  // Take the token and userid if it is not peresent redirect to Home page
-  if (!(Cookies.get("token") && Cookies.get("userid"))) {
-    Cookies.remove("token");
-    Cookies.remove("userid");
-    window.location.href = "/";
-  }
-
   // Take All Props
   const {
     // Mode UseState Props
@@ -145,7 +138,7 @@ const AddTask = (props) => {
     if (token && userid) {
       // Axios Get Request from Backend
       axios
-        .get(`${baseUrl}/api/list/get-all-list/${userid}`, {
+        .get(`${baseUrl}/lists/get-all-list/${userid}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -204,7 +197,7 @@ const AddTask = (props) => {
 
         //  Axios get request from backend
         axios
-          .get(`${baseUrl}/api/list/get-per-list/${userid}/${activeFilter}`, {
+          .get(`${baseUrl}/lists/get-per-list/${userid}/${activeFilter}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -291,7 +284,7 @@ const AddTask = (props) => {
 
         // Send to the Backend
         axios
-          .post(`${baseUrl}/api/task/create-task/${userid}`, createTask, {
+          .post(`${baseUrl}/tasks/create-task/${userid}`, createTask, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -351,7 +344,7 @@ const AddTask = (props) => {
 
         // Send to the Backend
         axios
-          .put(`${baseUrl}/api/task/edit-task/${userid}`, createTask, {
+          .put(`${baseUrl}/tasks/edit-task/${userid}`, createTask, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -406,14 +399,11 @@ const AddTask = (props) => {
 
         // Send to the Backend
         axios
-          .delete(
-            `${baseUrl}/api/task/delete-task/${userid}/${createTask._id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
+          .delete(`${baseUrl}/tasks/delete-task/${userid}/${createTask._id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((res) => {
             // Call AllList Func
             allList();
@@ -447,299 +437,289 @@ const AddTask = (props) => {
 
   return (
     <>
-      {/* If Token and UserId present then open Details Page */}
-      {Cookies.get("token") && Cookies.get("userid") ? (
-        <>
-          {/* Main Add Task Box */}
-          <div
-            className="addTaskBox"
-            style={{
-              backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+      {/* Main Add Task Box */}
+      <div
+        className="addTaskBox"
+        style={{
+          backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+        }}
+      >
+        {/* Heading */}
+        <h5
+          style={{
+            alignSelf: "flex-start",
+            margin: "10px",
+            marginLeft: "15px",
+            color: mode ? "rgb(65, 65, 65)" : "white",
+          }}
+        >
+          {editTask ? "Update Task" : "Create Task"}
+        </h5>
+
+        {/* Title Field */}
+        <TextField
+          label="Title"
+          color="warning"
+          type="text"
+          name="title"
+          value={createTask.title}
+          onChange={handleCreateTaskChange}
+          variant="filled"
+          style={{
+            width: "90%",
+            margin: "10px 0",
+            backgroundColor: mode ? "" : "white",
+            borderTopLeftRadius: "5px",
+            borderTopRightRadius: "5px",
+          }}
+          InputLabelProps={{
+            style: {
+              color: "black", // Set the initial placeholder color to white
+            },
+          }}
+          InputProps={{
+            style: {
+              color: "black",
+              fontWeight: "500",
+              letterSpacing: "0.5px",
+            },
+          }}
+        />
+
+        {/* Description Field */}
+        <textarea
+          name="description"
+          id=""
+          placeholder="Description"
+          value={createTask.description}
+          onChange={handleCreateTaskChange}
+          style={{
+            color: "black",
+            backgroundColor: mode ? "#D9D9D9" : "white",
+            fontWeight: "400",
+            letterSpacing: "0.5px",
+          }}
+        />
+
+        {/* Select Form List*/}
+        <FormControl
+          className="listInput"
+          sx={{
+            backgroundColor: mode ? "" : "white",
+            borderTopLeftRadius: "5px",
+            borderTopRightRadius: "5px",
+          }}
+        >
+          {/* Select */}
+          <Select
+            id="demo-simple-select"
+            name="list"
+            value={createTask.list || "Select List"}
+            onChange={handleCreateTaskChange}
+            variant="filled"
+            color="warning"
+            sx={{
+              color: "black",
+              fontWeight: "500",
+              letterSpacing: "0.5px",
+              backgroundColor: mode ? "" : "white",
             }}
           >
-            {/* Heading */}
-            <h5
-              style={{
-                alignSelf: "flex-start",
-                margin: "10px",
-                marginLeft: "15px",
-                color: mode ? "rgb(65, 65, 65)" : "white",
-              }}
-            >
-              {editTask ? "Update Task" : "Create Task"}
-            </h5>
-
-            {/* Title Field */}
-            <TextField
-              label="Title"
-              color="warning"
-              type="text"
-              name="title"
-              value={createTask.title}
-              onChange={handleCreateTaskChange}
-              variant="filled"
-              style={{
-                width: "90%",
-                margin: "10px 0",
-                backgroundColor: mode ? "" : "white",
-                borderTopLeftRadius: "5px",
-                borderTopRightRadius: "5px",
-              }}
-              InputLabelProps={{
-                style: {
-                  color: "black", // Set the initial placeholder color to white
-                },
-              }}
-              InputProps={{
-                style: {
-                  color: "black",
-                  fontWeight: "500",
-                  letterSpacing: "0.5px",
-                },
-              }}
-            />
-
-            {/* Description Field */}
-            <textarea
-              name="description"
-              id=""
-              placeholder="Description"
-              value={createTask.description}
-              onChange={handleCreateTaskChange}
-              style={{
-                color: "black",
-                backgroundColor: mode ? "#D9D9D9" : "white",
-                fontWeight: "400",
-                letterSpacing: "0.5px",
-              }}
-            />
-
-            {/* Select Form List*/}
-            <FormControl
-              className="listInput"
-              sx={{
-                backgroundColor: mode ? "" : "white",
-                borderTopLeftRadius: "5px",
-                borderTopRightRadius: "5px",
-              }}
-            >
-              {/* Select */}
-              <Select
-                id="demo-simple-select"
-                name="list"
-                value={createTask.list || "Select List"}
-                onChange={handleCreateTaskChange}
-                variant="filled"
-                color="warning"
-                sx={{
-                  color: "black",
-                  fontWeight: "500",
-                  letterSpacing: "0.5px",
-                  backgroundColor: mode ? "" : "white",
-                }}
-              >
-                {/* Menu Item */}
-                <MenuItem disabled selected value="Select List">
-                  Select List
-                </MenuItem>
-                {/* Menu Item */}
-                {taskList &&
-                  taskList.listArr.length !== 0 &&
-                  taskList.listArr?.map((option, index) => {
-                    return (
-                      <MenuItem
-                        key={index}
-                        value={option.name}
-                        sx={{
-                          height: "48px", // set the height to 48px
-                          display: "flex",
-                          alignItems: "center", // vertically center the content
-                          width: "fitContent",
-                          backgroundColor: mode ? "" : "white",
-                        }}
-                      >
-                        {option.name}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </FormControl>
-
-            {/* Input for Date */}
-            <input
-              type="date"
-              name="date"
-              id=""
-              value={createTask.date}
-              onChange={handleCreateTaskChange}
-              style={{
-                color: "black",
-                backgroundColor: mode ? "#D9D9D9" : "white",
-              }}
-            />
-
-            {/* Done Box */}
-            <div className="doneBox">
-              {/* CheckBox */}
-              <Checkbox
-                id="done"
-                checked={createTask.done}
-                name="done"
-                onChange={(e) => {
-                  setCreateTask({
-                    ...createTask,
-                    done: e.target.checked,
-                  });
-                }}
-                sx={{
-                  color: pink[800],
-                  "&.Mui-checked": {
-                    color: pink[600],
-                  },
-                }}
-              />
-              {/* Label */}
-              <label
-                htmlFor="done"
-                style={{
-                  color: mode ? "black" : "white",
-                  cursor: "pointer",
-                }}
-              >
-                Done
-              </label>
-            </div>
-
-            {/* Add Task Button */}
-            <Button
-              sx={{
-                width: "90%",
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                color: mode ? "rgb(65, 65, 65)" : "white",
-                mt: 2,
-                mb: 1,
-                pt: 1.2,
-                pb: 1.2,
-                fontWeight: "600",
-              }}
-              size="medium"
-              variant="outlined"
-              color="warning"
-              onClick={addSubTask}
-            >
-              {/* Add Icon */}
-              <AddCircleIcon
-                sx={{
-                  mr: 1.2,
-                }}
-              />{" "}
-              Add Subtask
-            </Button>
-
-            {/* Map All the Subtask */}
-            {createTask.subtask.length !== 0 &&
-              createTask.subtask.map((s, i) => {
+            {/* Menu Item */}
+            <MenuItem disabled selected value="Select List">
+              Select List
+            </MenuItem>
+            {/* Menu Item */}
+            {taskList &&
+              taskList.listArr.length !== 0 &&
+              taskList.listArr?.map((option, index) => {
                 return (
-                  // Per SubBox
-                  <div key={i} className="subBox">
-                    {/* TextArea */}
-                    <textarea
-                      name="subtask"
-                      id=""
-                      placeholder="Subtask..."
-                      value={s}
-                      onChange={(e) => {
-                        handleSubTaskChange(e, i);
-                      }}
-                      style={{
-                        color: "black",
-                        backgroundColor: mode ? "#D9D9D9" : "white",
-                        fontWeight: "400",
-                        letterSpacing: "0.5px",
-                      }}
-                    />
-                    {/* Delete Icon */}
-                    <DeleteIcon
-                      onClick={() => {
-                        deleteSubTask(i);
-                      }}
-                      sx={{
-                        color: "red",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
+                  <MenuItem
+                    key={index}
+                    value={option.name}
+                    sx={{
+                      height: "48px", // set the height to 48px
+                      display: "flex",
+                      alignItems: "center", // vertically center the content
+                      width: "fitContent",
+                      backgroundColor: mode ? "" : "white",
+                    }}
+                  >
+                    {option.name}
+                  </MenuItem>
                 );
               })}
+          </Select>
+        </FormControl>
 
-            {/* Fixed Box */}
-            <div
-              className="fixed"
-              style={{
-                backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
-              }}
-            >
-              {/* If is it Edit then show Delete Button Other wise Not */}
-              {editTask ? (
-                <Button
-                  variant="outlined"
-                  color="error"
-                  sx={{
-                    m: 1,
+        {/* Input for Date */}
+        <input
+          type="date"
+          name="date"
+          id=""
+          value={createTask.date}
+          onChange={handleCreateTaskChange}
+          style={{
+            color: "black",
+            backgroundColor: mode ? "#D9D9D9" : "white",
+          }}
+        />
+
+        {/* Done Box */}
+        <div className="doneBox">
+          {/* CheckBox */}
+          <Checkbox
+            id="done"
+            checked={createTask.done}
+            name="done"
+            onChange={(e) => {
+              setCreateTask({
+                ...createTask,
+                done: e.target.checked,
+              });
+            }}
+            sx={{
+              color: pink[800],
+              "&.Mui-checked": {
+                color: pink[600],
+              },
+            }}
+          />
+          {/* Label */}
+          <label
+            htmlFor="done"
+            style={{
+              color: mode ? "black" : "white",
+              cursor: "pointer",
+            }}
+          >
+            Done
+          </label>
+        </div>
+
+        {/* Add Task Button */}
+        <Button
+          sx={{
+            width: "90%",
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            color: mode ? "rgb(65, 65, 65)" : "white",
+            mt: 2,
+            mb: 1,
+            pt: 1.2,
+            pb: 1.2,
+            fontWeight: "600",
+          }}
+          size="medium"
+          variant="outlined"
+          color="warning"
+          onClick={addSubTask}
+        >
+          {/* Add Icon */}
+          <AddCircleIcon
+            sx={{
+              mr: 1.2,
+            }}
+          />{" "}
+          Add Subtask
+        </Button>
+
+        {/* Map All the Subtask */}
+        {createTask.subtask.length !== 0 &&
+          createTask.subtask.map((s, i) => {
+            return (
+              // Per SubBox
+              <div key={i} className="subBox">
+                {/* TextArea */}
+                <textarea
+                  name="subtask"
+                  id=""
+                  placeholder="Subtask..."
+                  value={s}
+                  onChange={(e) => {
+                    handleSubTaskChange(e, i);
                   }}
-                  onClick={handleDeleteTask}
-                >
-                  Delete Task
-                </Button>
-              ) : (
-                <></>
-              )}
+                  style={{
+                    color: "black",
+                    backgroundColor: mode ? "#D9D9D9" : "white",
+                    fontWeight: "400",
+                    letterSpacing: "0.5px",
+                  }}
+                />
+                {/* Delete Icon */}
+                <DeleteIcon
+                  onClick={() => {
+                    deleteSubTask(i);
+                  }}
+                  sx={{
+                    color: "red",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            );
+          })}
 
-              {/* Save Button */}
-              <Button
-                variant="contained"
-                color="success"
-                sx={{
-                  m: 1,
-                }}
-                onClick={() => {
-                  editTask ? handleEditTask() : handleSubmitTask();
-                }}
-              >
-                Save
-              </Button>
-            </div>
-
-            {/* Snack Bar Alert */}
-            <Snackbar
-              open={snack.open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
+        {/* Fixed Box */}
+        <div
+          className="fixed"
+          style={{
+            backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+          }}
+        >
+          {/* If is it Edit then show Delete Button Other wise Not */}
+          {editTask ? (
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{
+                m: 1,
               }}
+              onClick={handleDeleteTask}
             >
-              {/* Mui Alert */}
-              <MuiAlert
-                onClose={handleClose}
-                severity={snack.severity}
-                sx={{ width: "100%" }}
-              >
-                {/* Message */}
-                <strong>{snack.message}</strong>
-              </MuiAlert>
-            </Snackbar>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* If Token and UserId not present then reload the page */}
-          {window.location.reload()}
-        </>
-      )}
+              Delete Task
+            </Button>
+          ) : (
+            <></>
+          )}
+
+          {/* Save Button */}
+          <Button
+            variant="contained"
+            color="success"
+            sx={{
+              m: 1,
+            }}
+            onClick={() => {
+              editTask ? handleEditTask() : handleSubmitTask();
+            }}
+          >
+            Save
+          </Button>
+        </div>
+
+        {/* Snack Bar Alert */}
+        <Snackbar
+          open={snack.open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          {/* Mui Alert */}
+          <MuiAlert
+            onClose={handleClose}
+            severity={snack.severity}
+            sx={{ width: "100%" }}
+          >
+            {/* Message */}
+            <strong>{snack.message}</strong>
+          </MuiAlert>
+        </Snackbar>
+      </div>
     </>
   );
 };

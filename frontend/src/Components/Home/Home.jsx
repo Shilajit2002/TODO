@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <div className="homeBox">
-        <h1 className="heading">Welcome Your ToDo</h1>
+        <h1 className="heading">Welcome Your ToDoMonk</h1>
         <div className="userBox">
           <div className="left">
             <SignUp/>

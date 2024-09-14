@@ -1,20 +1,12 @@
-// Import Express
-const express = require('express');
-// Import Router
-const router = new express.Router();
-
 // Import User Collection/Model
-const User = require("../Model/user");
+const User = require("../Models/user.model");
 // Import List Collection/Model
-const List = require("../Model/list");
+const List = require("../Models/list.model");
 // Import Task Collection/Model
-const Task = require("../Model/task");
+const Task = require("../Models/task.model");
 
-// Import Authentication
-const auth = require('../Middleware/auth');
-
-// Create Task API
-router.post("/create-list/:id", auth, async (req, res) => {
+// Create List API
+const createList = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -54,10 +46,10 @@ router.post("/create-list/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // All List API
-router.get("/get-all-list/:id", auth, async (req, res) => {
+const getAllList = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -81,10 +73,10 @@ router.get("/get-all-list/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Perticular List API
-router.get("/get-per-list/:id/:listId", auth, async (req, res) => {
+const getPerList = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -120,10 +112,10 @@ router.get("/get-per-list/:id/:listId", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Edit List API
-router.put("/edit-list/:id", auth, async (req, res) => {
+const editList = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -178,10 +170,10 @@ router.put("/edit-list/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Delete List API
-router.delete("/delete-list/:id/:listId", auth, async (req, res) => {
+const deleteList = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -221,7 +213,7 @@ router.delete("/delete-list/:id/:listId", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Exports the Router
-module.exports = router;
+module.exports = { createList, getAllList, getPerList, editList, deleteList };

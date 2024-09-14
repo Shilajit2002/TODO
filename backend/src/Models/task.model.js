@@ -1,10 +1,8 @@
 // Import Mongoose
 const mongoose = require('mongoose');
-// Import Validator
-const validator = require('validator');
 
 // Create Task Schema
-const taskSchema = mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -28,9 +26,9 @@ const taskSchema = mongoose.Schema({
                     type: String
                 }
             ],
-            done:{
-                type:Boolean,
-                default:false
+            done: {
+                type: Boolean,
+                default: false
             }
         }
     ]

@@ -1,10 +1,8 @@
 // Import Mongoose
 const mongoose = require('mongoose');
-// Import Validator
-const validator = require('validator');
 
 // Create List Schema
-const listSchema = mongoose.Schema({
+const listSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

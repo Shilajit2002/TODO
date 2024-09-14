@@ -122,13 +122,6 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Details = (props) => {
-  // Take the token and userid if it is not peresent redirect to Home page
-  if (!(Cookies.get("token") && Cookies.get("userid"))) {
-    Cookies.remove("token");
-    Cookies.remove("userid");
-    window.location.href = "/";
-  }
-
   // Take All Props
   const {
     // Active Filter UseState Props
@@ -203,7 +196,7 @@ const Details = (props) => {
     if (token && userid) {
       // Axios Get Request from Backend
       axios
-        .get(`${baseUrl}/api/user/get-details/${userid}`, {
+        .get(`${baseUrl}/users/get-details/${userid}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -230,7 +223,7 @@ const Details = (props) => {
     if (token && userid) {
       // Axios Get Request from Backend
       axios
-        .get(`${baseUrl}/api/list/get-all-list/${userid}`, {
+        .get(`${baseUrl}/lists/get-all-list/${userid}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -408,7 +401,7 @@ const Details = (props) => {
 
         // Send to the Backend
         axios
-          .post(`${baseUrl}/api/list/create-list/${userid}`, listData, {
+          .post(`${baseUrl}/lists/create-list/${userid}`, listData, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -480,7 +473,7 @@ const Details = (props) => {
         // Send to the Backend
         axios
           .put(
-            `${baseUrl}/api/list/edit-list/${userid}`,
+            `${baseUrl}/lists/edit-list/${userid}`,
             {
               name: listData.name,
               color: listData.color,
@@ -498,7 +491,7 @@ const Details = (props) => {
             setTaskList(res.data);
             // Send to Backend for Get all the Task Details
             axios
-              .get(`${baseUrl}/api/task/get-all-task/${userid}`, {
+              .get(`${baseUrl}/tasks/get-all-task/${userid}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
@@ -588,7 +581,7 @@ const Details = (props) => {
 
         // Send to the Backend
         axios
-          .delete(`${baseUrl}/api/list/delete-list/${userid}/${lid}`, {
+          .delete(`${baseUrl}/lists/delete-list/${userid}/${lid}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -664,7 +657,7 @@ const Details = (props) => {
 
         // Send to the Backend
         axios
-          .put(`${baseUrl}/api/user/edit-details/${userid}`, user, {
+          .put(`${baseUrl}/users/edit-details/${userid}`, user, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -719,7 +712,7 @@ const Details = (props) => {
     if (token && userid) {
       // Send to the Backend
       axios
-        .put(`${baseUrl}/api/user/edit-details/${userid}`, user, {
+        .put(`${baseUrl}/users/edit-details/${userid}`, user, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -780,751 +773,735 @@ const Details = (props) => {
 
   return (
     <>
-      {/* If Token and UserId present then open Details Page */}
-      {Cookies.get("token") && Cookies.get("userid") ? (
-        <>
-          {/* Main Details Box */}
-          <div
-            className="detailsBox"
-            style={{
-              backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
-              // Set the Width for Responsive
-              width: (() => {
-                if (w <= 1000 && detailsOpen) {
-                  return "300px";
-                } else if (w <= 1000 && !detailsOpen) {
-                  return "0px";
-                } else if (w > 1000) {
-                  return "23%";
-                }
-              })(),
-            }}
-          >
-            {/* If User Data Present */}
-            {user ? (
-              <>
-                {/* Name Box */}
-                <div
-                  className="names"
-                  style={{
-                    backgroundColor: mode
-                      ? "rgb(238, 238, 238)"
-                      : "rgb(0, 11, 19)",
-                  }}
-                >
-                  {/* Profile Pic */}
-                  <img
-                    src={user.pic ? user.pic : profilePic}
-                    alt=""
-                    style={{
-                      boxShadow: mode
-                        ? "rgba(0, 0, 0, 0.24) 0px 3px 8px"
-                        : "rgba(83, 83, 83, 0.432) 0px 3px 8px",
-                    }}
-                  />
-                  {/* Name */}
-                  <h5
-                    style={{
-                      color: mode ? "black" : "white",
-                    }}
-                  >
-                    Hey, {user.fullname.split(" ")[0].toUpperCase()}
-                  </h5>
-
-                  {/* Close Icon */}
-                  <HighlightOffIcon
-                    sx={{
-                      color: "red",
-                      m: 1,
-                      display: w <= 1000 ? "block" : "none",
-                      marginLeft: "auto",
-                    }}
-                    onClick={() => {
-                      setDetailsOpen(false);
-                    }}
-                  />
-                </div>
-              </>
-            ) : (
-              // If User Data is Not Present
-              <>
-                {/* Name Box */}
-                <div className="names">
-                  {/* Skeleton for Profile Pic */}
-                  <Skeleton
-                    variant="circular"
-                    width={50}
-                    height={50}
-                    sx={{
-                      mr: 1.1,
-                      boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                    }}
-                  />
-                  {/* Skeleton for Name */}
-                  <Skeleton variant="rectangular" width={150} height={30} />
-                </div>
-              </>
-            )}
-
-            {/* Search Bar Box */}
+      {/* Main Details Box */}
+      <div
+        className="detailsBox"
+        style={{
+          backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+          // Set the Width for Responsive
+          width: (() => {
+            if (w <= 1000 && detailsOpen) {
+              return "300px";
+            } else if (w <= 1000 && !detailsOpen) {
+              return "0px";
+            } else if (w > 1000) {
+              return "23%";
+            }
+          })(),
+        }}
+      >
+        {/* If User Data Present */}
+        {user ? (
+          <>
+            {/* Name Box */}
             <div
-              className="searchBar"
-              style={{
-                backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
-                boxShadow: mode
-                  ? "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-                  : "rgba(99, 99, 99, 0.637) 0px 1px 3px 0px,rgba(42, 90, 138, 0.568) 0px 0px 0px 1px",
-              }}
-            >
-              {/* Search Icon */}
-              <SearchIcon
-                sx={{
-                  color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  mr: 1,
-                }}
-              />
-              {/* Input for Search */}
-              <input
-                type="search"
-                name="search"
-                id=""
-                value={search}
-                placeholder="Search"
-                style={{
-                  color: mode ? "rgb(32, 32, 32)" : "white",
-                  "::placeholder": {
-                    /* Placeholder color styles */
-                    color: mode ? "rgb(65, 65, 65)" : "white",
-                  },
-                }}
-                onChange={(e) => {
-                  handleSearchFunc(e);
-                }}
-              />
-            </div>
-
-            {/* Task Bar */}
-            <div className="tasksBar">
-              {/* Heading */}
-              <p
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "whitesmoke",
-                }}
-              >
-                TASKS
-              </p>
-
-              {/* Upcoming Box */}
-              <div
-                className={`tfilter ${activeFilter === 1 ? "active" : ""}`}
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-                onClick={() => handleActiveFilterChange(1)}
-              >
-                {/* Upcoming Icon */}
-                <UpcomingIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Upcoming</span>
-                {/* Count */}
-                <span>{taskCount.upcomingCount}</span>
-              </div>
-
-              {/* Today Box */}
-              <div
-                className={`tfilter ${activeFilter === 2 ? "active" : ""}`}
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-                onClick={() => handleActiveFilterChange(2)}
-              >
-                {/* Today Icon */}
-                <ChecklistIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Today</span>
-                {/* Count */}
-                <span>{taskCount.todayCount}</span>
-              </div>
-
-              {/* Previous Box */}
-              <div
-                className={`tfilter ${activeFilter === 3 ? "active" : ""}`}
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-                onClick={() => handleActiveFilterChange(3)}
-              >
-                {/* Previous Icon */}
-                <UndoIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Previous</span>
-                {/* Count */}
-                <span>{taskCount.previousCount}</span>
-              </div>
-
-              {/* Date Box */}
-              <div
-                className={`tfilter ${activeFilter === 4 ? "active" : ""}`}
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-              >
-                {/* Input for Date */}
-                <input
-                  type="date"
-                  name="dateVal"
-                  id=""
-                  value={dateVal}
-                  onChange={(e) => {
-                    setDateVal(e.target.value);
-                    handleActiveFilterDateChange(4, e.target.value);
-                  }}
-                  style={{
-                    color: mode ? "rgb(65, 65, 65)" : "white",
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* List Bar */}
-            <div className="listsBar">
-              {/* Heading */}
-              <p
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "whitesmoke",
-                }}
-              >
-                LISTS
-              </p>
-
-              {/* If List is Present */}
-              {taskList && taskList.listArr.length !== 0 ? (
-                taskList.listArr.map((tl) => {
-                  return (
-                    // Per List Box
-                    <div
-                      className={`lfilter ${
-                        activeFilter === tl._id ? "active" : ""
-                      }`}
-                      style={{
-                        color: mode ? "rgb(65, 65, 65)" : "white",
-                      }}
-                      onClick={() =>
-                        handleActiveFilterChange(tl._id, tl.name, tl.count)
-                      }
-                      key={tl._id}
-                    >
-                      {/* List Color Box */}
-                      <div
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          borderRadius: "5px",
-                          backgroundColor: `${tl.color}`,
-                          marginRight: "15px",
-                        }}
-                      ></div>
-                      {/* Heading */}
-                      <span
-                        style={{
-                          display: "block",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {tl.name}
-                      </span>
-                      {/* Edit Icon */}
-                      <EditIcon
-                        sx={{
-                          mr: 1,
-                          color: "darkorange",
-                          marginLeft: "auto",
-                          textAlign: "end",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          // Set list data with current list data
-                          setListData({
-                            name: tl.name,
-                            color: tl.color,
-                            edit: true,
-                          });
-                          // Set edit list data with current list data
-                          setEditList({
-                            _id: tl._id,
-                            count: tl.count,
-                          });
-                          // Open the Dialog Box
-                          handleClickOpenListDialog();
-                        }}
-                      />
-                      {/* Delete Icon */}
-                      <DeleteIcon
-                        sx={{
-                          mr: 1,
-                          color: "red",
-                          textAlign: "end",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          handleListDelete(tl._id, tl.count);
-                        }}
-                      />
-                      {/* List Count Task */}
-                      <span>{handleCountFormat(tl.count)}</span>
-                    </div>
-                  );
-                })
-              ) : (
-                <>
-                  {/* If No Task Present */}
-                  {(taskList && taskList.listArr.length === 0) ||
-                  taskList !== "" ? (
-                    <>
-                      <p
-                        style={{
-                          fontWeight: "500",
-                          color: mode ? "black" : "white",
-                          alignSelf: "center",
-                        }}
-                      >
-                        No List Added `~`
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      {/* Show Skeleton Initially */}
-                      {[0, 1].map((s, i) => {
-                        return (
-                          // Skeleton Box
-                          <div className="lfilter" key={i}>
-                            {/* Skeleton for List */}
-                            <Skeleton
-                              variant="rectangular"
-                              height={25}
-                              sx={{
-                                width: "100%",
-                                borderRadius: "5px",
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Down Box */}
-            <div
-              className="downBox"
+              className="names"
               style={{
                 backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
               }}
             >
-              {/* Setting Box */}
-              <div
-                className="settings"
+              {/* Profile Pic */}
+              <img
+                src={user.pic ? user.pic : profilePic}
+                alt=""
                 style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
+                  boxShadow: mode
+                    ? "rgba(0, 0, 0, 0.24) 0px 3px 8px"
+                    : "rgba(83, 83, 83, 0.432) 0px 3px 8px",
                 }}
-                onClick={() => handleClickOpenListDialog()}
-              >
-                {/* Add Icon */}
-                <AddCircleIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Add New List</span>
-              </div>
-              {/* Setting Box */}
-              <div
-                className="settings"
+              />
+              {/* Name */}
+              <h5
                 style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-                onClick={() => handleClickOpenProfileDialog()}
-              >
-                {/* Profile Icon */}
-                <AccountCircleIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Profile</span>
-              </div>
-              {/* Setting Box */}
-              <div
-                className="settings"
-                onClick={() => {
-                  Cookies.remove("token");
-                  Cookies.remove("userid");
-                  window.location.href = "/";
-                }}
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-              >
-                {/* Sign Out Icon */}
-                <LogoutIcon
-                  sx={{
-                    mr: 1.5,
-                    color: mode ? "rgb(65, 65, 65)" : "aliceblue",
-                  }}
-                />
-                {/* Heading */}
-                <span>Sign Out</span>
-              </div>
-              {/* Setting Box */}
-              <div
-                className="settings"
-                style={{
-                  color: mode ? "rgb(65, 65, 65)" : "white",
-                }}
-              >
-                {/* Form Control Label for Switch */}
-                <FormControlLabel
-                  control={
-                    // Material Switch for Light and Dark Mode
-                    <MaterialUISwitch
-                      checked={mode}
-                      value={mode}
-                      onChange={(e) => {
-                        setMode(e.target.checked);
-                        setUser({
-                          ...user,
-                          mode: e.target.checked,
-                        });
-                      }}
-                    />
-                  }
-                  // Show Label
-                  label={mode ? "Light Mode" : "Dark Mode"}
-                />
-              </div>
-            </div>
-
-            {/* List Dialog Box */}
-            <Dialog open={openListDialog} onClose={handleCloseListDialog}>
-              {/* Title */}
-              <DialogTitle
-                sx={{
-                  backgroundColor: mode ? "white" : "#232B2B",
                   color: mode ? "black" : "white",
                 }}
               >
-                {listData.edit ? "Update List" : "Add New List"}
-              </DialogTitle>
-              {/* Content */}
-              <DialogContent
-                sx={{
-                  backgroundColor: mode ? "white" : "#232B2B",
-                }}
-              >
-                {/* Add List Text Filed */}
-                <TextField
-                  id="name"
-                  label="Enter list name"
-                  name="name"
-                  type="text"
-                  fullWidth
-                  color="primary"
-                  value={listData.name}
-                  variant="filled"
-                  style={{
-                    backgroundColor: mode ? "" : "white",
-                  }}
-                  InputProps={{
-                    style: {
-                      color: "black",
-                      fontWeight: "500",
-                      letterSpacing: "0.5px",
-                    },
-                  }}
-                  onChange={(e) => {
-                    setListData({
-                      ...listData,
-                      name: e.target.value,
-                    });
-                  }}
-                />
-                {/* Label for Color */}
-                <label
-                  htmlFor="color"
-                  style={{
-                    display: "block",
-                    marginTop: "10px",
-                    color: mode ? "rgb(65, 65, 65)" : "white",
-                    cursor: "pointer",
-                  }}
-                >
-                  Choose list color
-                </label>
-                {/* Color Picker */}
-                <input
-                  type="color"
-                  name="color"
-                  id="color"
-                  value={listData.color}
-                  onChange={(e) => {
-                    setListData({
-                      ...listData,
-                      color: e.target.value,
-                    });
-                  }}
-                  style={{
-                    marginTop: "5px",
-                    cursor: "pointer",
-                    borderStyle: "none",
-                    boxShadow:
-                      "rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset",
-                  }}
-                />
-              </DialogContent>
-              {/* Action Buton */}
-              <DialogActions>
-                {/* Save Button */}
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  onClick={() => {
-                    // If Edit true then call edit func
-                    if (listData.edit) {
-                      handleEditListDialog();
-                    }
-                    // Othrwsie call add func
-                    else {
-                      handleSubmitListDialog();
-                    }
-                    handleCloseListDialog();
-                  }}
-                >
-                  Save
-                </Button>
-                {/* Cancel Button */}
-                <Button
-                  onClick={handleCloseListDialog}
-                  color="error"
-                  size="small"
-                >
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
+                Hey, {user.fullname.split(" ")[0].toUpperCase()}
+              </h5>
 
-            {/* Profile Dialog Box */}
-            <Dialog open={openProfileDialog} onClose={handleCloseProfileDialog}>
-              {/* Content */}
-              <DialogContent
+              {/* Close Icon */}
+              <HighlightOffIcon
                 sx={{
-                  backgroundColor: mode ? "white" : "#232B2B",
+                  color: "red",
+                  m: 1,
+                  display: w <= 1000 ? "block" : "none",
+                  marginLeft: "auto",
                 }}
-              >
-                {/* Profile Details */}
-                <div className="profDetails">
-                  {user ? (
-                    <>
-                      {/* Profile Pic */}
-                      <img src={user.pic ? user.pic : profilePic} alt="" />
-                      {/* Picture Upload Button */}
-                      <p>
-                        <input
-                          type="file"
-                          id="file"
-                          onChange={(e) => {
-                            handleProfileUpload(e);
+                onClick={() => {
+                  setDetailsOpen(false);
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          // If User Data is Not Present
+          <>
+            {/* Name Box */}
+            <div className="names">
+              {/* Skeleton for Profile Pic */}
+              <Skeleton
+                variant="circular"
+                width={50}
+                height={50}
+                sx={{
+                  mr: 1.1,
+                  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                }}
+              />
+              {/* Skeleton for Name */}
+              <Skeleton variant="rectangular" width={150} height={30} />
+            </div>
+          </>
+        )}
+
+        {/* Search Bar Box */}
+        <div
+          className="searchBar"
+          style={{
+            backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+            boxShadow: mode
+              ? "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+              : "rgba(99, 99, 99, 0.637) 0px 1px 3px 0px,rgba(42, 90, 138, 0.568) 0px 0px 0px 1px",
+          }}
+        >
+          {/* Search Icon */}
+          <SearchIcon
+            sx={{
+              color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              mr: 1,
+            }}
+          />
+          {/* Input for Search */}
+          <input
+            type="search"
+            name="search"
+            id=""
+            value={search}
+            placeholder="Search"
+            style={{
+              color: mode ? "rgb(32, 32, 32)" : "white",
+              "::placeholder": {
+                /* Placeholder color styles */
+                color: mode ? "rgb(65, 65, 65)" : "white",
+              },
+            }}
+            onChange={(e) => {
+              handleSearchFunc(e);
+            }}
+          />
+        </div>
+
+        {/* Task Bar */}
+        <div className="tasksBar">
+          {/* Heading */}
+          <p
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "whitesmoke",
+            }}
+          >
+            TASKS
+          </p>
+
+          {/* Upcoming Box */}
+          <div
+            className={`tfilter ${activeFilter === 1 ? "active" : ""}`}
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+            onClick={() => handleActiveFilterChange(1)}
+          >
+            {/* Upcoming Icon */}
+            <UpcomingIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Upcoming</span>
+            {/* Count */}
+            <span>{taskCount.upcomingCount}</span>
+          </div>
+
+          {/* Today Box */}
+          <div
+            className={`tfilter ${activeFilter === 2 ? "active" : ""}`}
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+            onClick={() => handleActiveFilterChange(2)}
+          >
+            {/* Today Icon */}
+            <ChecklistIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Today</span>
+            {/* Count */}
+            <span>{taskCount.todayCount}</span>
+          </div>
+
+          {/* Previous Box */}
+          <div
+            className={`tfilter ${activeFilter === 3 ? "active" : ""}`}
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+            onClick={() => handleActiveFilterChange(3)}
+          >
+            {/* Previous Icon */}
+            <UndoIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Previous</span>
+            {/* Count */}
+            <span>{taskCount.previousCount}</span>
+          </div>
+
+          {/* Date Box */}
+          <div
+            className={`tfilter ${activeFilter === 4 ? "active" : ""}`}
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+          >
+            {/* Input for Date */}
+            <input
+              type="date"
+              name="dateVal"
+              id=""
+              value={dateVal}
+              onChange={(e) => {
+                setDateVal(e.target.value);
+                handleActiveFilterDateChange(4, e.target.value);
+              }}
+              style={{
+                color: mode ? "rgb(65, 65, 65)" : "white",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* List Bar */}
+        <div className="listsBar">
+          {/* Heading */}
+          <p
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "whitesmoke",
+            }}
+          >
+            LISTS
+          </p>
+
+          {/* If List is Present */}
+          {taskList && taskList.listArr.length !== 0 ? (
+            taskList.listArr.map((tl) => {
+              return (
+                // Per List Box
+                <div
+                  className={`lfilter ${
+                    activeFilter === tl._id ? "active" : ""
+                  }`}
+                  style={{
+                    color: mode ? "rgb(65, 65, 65)" : "white",
+                  }}
+                  onClick={() =>
+                    handleActiveFilterChange(tl._id, tl.name, tl.count)
+                  }
+                  key={tl._id}
+                >
+                  {/* List Color Box */}
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "5px",
+                      backgroundColor: `${tl.color}`,
+                      marginRight: "15px",
+                    }}
+                  ></div>
+                  {/* Heading */}
+                  <span
+                    style={{
+                      display: "block",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {tl.name}
+                  </span>
+                  {/* Edit Icon */}
+                  <EditIcon
+                    sx={{
+                      mr: 1,
+                      color: "darkorange",
+                      marginLeft: "auto",
+                      textAlign: "end",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      // Set list data with current list data
+                      setListData({
+                        name: tl.name,
+                        color: tl.color,
+                        edit: true,
+                      });
+                      // Set edit list data with current list data
+                      setEditList({
+                        _id: tl._id,
+                        count: tl.count,
+                      });
+                      // Open the Dialog Box
+                      handleClickOpenListDialog();
+                    }}
+                  />
+                  {/* Delete Icon */}
+                  <DeleteIcon
+                    sx={{
+                      mr: 1,
+                      color: "red",
+                      textAlign: "end",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      handleListDelete(tl._id, tl.count);
+                    }}
+                  />
+                  {/* List Count Task */}
+                  <span>{handleCountFormat(tl.count)}</span>
+                </div>
+              );
+            })
+          ) : (
+            <>
+              {/* If No Task Present */}
+              {(taskList && taskList.listArr.length === 0) ||
+              taskList !== "" ? (
+                <>
+                  <p
+                    style={{
+                      fontWeight: "500",
+                      color: mode ? "black" : "white",
+                      alignSelf: "center",
+                    }}
+                  >
+                    No List Added `~`
+                  </p>
+                </>
+              ) : (
+                <>
+                  {/* Show Skeleton Initially */}
+                  {[0, 1].map((s, i) => {
+                    return (
+                      // Skeleton Box
+                      <div className="lfilter" key={i}>
+                        {/* Skeleton for List */}
+                        <Skeleton
+                          variant="rectangular"
+                          height={25}
+                          sx={{
+                            width: "100%",
+                            borderRadius: "5px",
                           }}
                         />
-                        <label htmlFor="file">
-                          {/* Add Icon */}
-                          <AddAPhotoIcon
-                            sx={{
-                              fontSize: "1.5rem",
-                              color: "white",
-                            }}
-                          />
-                        </label>
-                      </p>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </>
+          )}
+        </div>
 
-                      {/* Full Name */}
-                      <TextField
-                        label="Full Name"
-                        color="secondary"
-                        type="text"
-                        name="fullname"
-                        value={user.fullname}
-                        aria-readonly="true"
-                        className="profInput"
-                        variant="filled"
-                        style={{
-                          backgroundColor: mode ? "" : "white",
-                        }}
-                        InputProps={{
-                          style: {
-                            color: "black",
-                            fontWeight: "500",
-                            letterSpacing: "0.5px",
-                          },
-                        }}
-                        onChange={(e) => {
-                          setUser({
-                            ...user,
-                            fullname: e.target.value,
-                          });
-                        }}
-                      />
-
-                      {/* Email */}
-                      <TextField
-                        label="Email Id"
-                        color="secondary"
-                        type="text"
-                        name="email"
-                        value={user.email}
-                        aria-readonly="true"
-                        className="profInput"
-                        variant="filled"
-                        style={{
-                          backgroundColor: mode ? "" : "white",
-                        }}
-                        InputProps={{
-                          style: {
-                            color: "black",
-                            fontWeight: "500",
-                            letterSpacing: "0.5px",
-                          },
-                        }}
-                      />
-
-                      {/* All Task */}
-                      <TextField
-                        label="All Task"
-                        color="secondary"
-                        type="text"
-                        name="task"
-                        value={task ? `${task.taskArr.length}` : "0"}
-                        aria-readonly="true"
-                        className="profInput"
-                        variant="filled"
-                        style={{
-                          backgroundColor: mode ? "" : "white",
-                        }}
-                        InputProps={{
-                          style: {
-                            color: "black",
-                            fontWeight: "500",
-                            letterSpacing: "0.5px",
-                          },
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      {/* Skeleton For Logo */}
-                      <Skeleton
-                        variant="circular"
-                        sx={{
-                          width: "180px",
-                          height: "180px",
-                          borderRadius: "50%",
-                        }}
-                      />
-                      {/* Text Filed Skeleton */}
-                      {[0, 1, 2].map((s, i) => {
-                        return (
-                          <Skeleton
-                            key={i}
-                            variant="rectangular"
-                            height={50}
-                            sx={{
-                              width: "100%",
-                              borderRadius: "5px",
-                              m: 1,
-                            }}
-                          />
-                        );
-                      })}
-                    </>
-                  )}
-                </div>
-              </DialogContent>
-              {/* Action Buton */}
-              <DialogActions>
-                {/* Save Button */}
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  onClick={() => {
-                    handleProfileEditFunc();
-                    handleCloseProfileDialog();
+        {/* Down Box */}
+        <div
+          className="downBox"
+          style={{
+            backgroundColor: mode ? "rgb(238, 238, 238)" : "rgb(0, 11, 19)",
+          }}
+        >
+          {/* Setting Box */}
+          <div
+            className="settings"
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+            onClick={() => handleClickOpenListDialog()}
+          >
+            {/* Add Icon */}
+            <AddCircleIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Add New List</span>
+          </div>
+          {/* Setting Box */}
+          <div
+            className="settings"
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+            onClick={() => handleClickOpenProfileDialog()}
+          >
+            {/* Profile Icon */}
+            <AccountCircleIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Profile</span>
+          </div>
+          {/* Setting Box */}
+          <div
+            className="settings"
+            onClick={() => {
+              Cookies.remove("token");
+              Cookies.remove("userid");
+              window.location.href = "/";
+            }}
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+          >
+            {/* Sign Out Icon */}
+            <LogoutIcon
+              sx={{
+                mr: 1.5,
+                color: mode ? "rgb(65, 65, 65)" : "aliceblue",
+              }}
+            />
+            {/* Heading */}
+            <span>Sign Out</span>
+          </div>
+          {/* Setting Box */}
+          <div
+            className="settings"
+            style={{
+              color: mode ? "rgb(65, 65, 65)" : "white",
+            }}
+          >
+            {/* Form Control Label for Switch */}
+            <FormControlLabel
+              control={
+                // Material Switch for Light and Dark Mode
+                <MaterialUISwitch
+                  checked={mode}
+                  value={mode}
+                  onChange={(e) => {
+                    setMode(e.target.checked);
+                    setUser({
+                      ...user,
+                      mode: e.target.checked,
+                    });
                   }}
-                >
-                  Save
-                </Button>
-                {/* Cancel Button */}
-                <Button
-                  onClick={handleCloseProfileDialog}
-                  color="error"
-                  size="small"
-                >
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
+                />
+              }
+              // Show Label
+              label={mode ? "Light Mode" : "Dark Mode"}
+            />
+          </div>
+        </div>
 
-            {/* Snack Bar Alert */}
-            <Snackbar
-              open={snack.open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
+        {/* List Dialog Box */}
+        <Dialog open={openListDialog} onClose={handleCloseListDialog}>
+          {/* Title */}
+          <DialogTitle
+            sx={{
+              backgroundColor: mode ? "white" : "#232B2B",
+              color: mode ? "black" : "white",
+            }}
+          >
+            {listData.edit ? "Update List" : "Add New List"}
+          </DialogTitle>
+          {/* Content */}
+          <DialogContent
+            sx={{
+              backgroundColor: mode ? "white" : "#232B2B",
+            }}
+          >
+            {/* Add List Text Filed */}
+            <TextField
+              id="name"
+              label="Enter list name"
+              name="name"
+              type="text"
+              fullWidth
+              color="primary"
+              value={listData.name}
+              variant="filled"
+              style={{
+                backgroundColor: mode ? "" : "white",
+              }}
+              InputProps={{
+                style: {
+                  color: "black",
+                  fontWeight: "500",
+                  letterSpacing: "0.5px",
+                },
+              }}
+              onChange={(e) => {
+                setListData({
+                  ...listData,
+                  name: e.target.value,
+                });
+              }}
+            />
+            {/* Label for Color */}
+            <label
+              htmlFor="color"
+              style={{
+                display: "block",
+                marginTop: "10px",
+                color: mode ? "rgb(65, 65, 65)" : "white",
+                cursor: "pointer",
               }}
             >
-              {/* Mui Alert */}
-              <MuiAlert
-                onClose={handleClose}
-                severity={snack.severity}
-                sx={{ width: "100%" }}
-              >
-                {/* Message */}
-                <strong>{snack.message}</strong>
-              </MuiAlert>
-            </Snackbar>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* If Token and UserId not present then reload the page */}
-          {window.location.reload()}
-        </>
-      )}
+              Choose list color
+            </label>
+            {/* Color Picker */}
+            <input
+              type="color"
+              name="color"
+              id="color"
+              value={listData.color}
+              onChange={(e) => {
+                setListData({
+                  ...listData,
+                  color: e.target.value,
+                });
+              }}
+              style={{
+                marginTop: "5px",
+                cursor: "pointer",
+                borderStyle: "none",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset",
+              }}
+            />
+          </DialogContent>
+          {/* Action Buton */}
+          <DialogActions>
+            {/* Save Button */}
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() => {
+                // If Edit true then call edit func
+                if (listData.edit) {
+                  handleEditListDialog();
+                }
+                // Othrwsie call add func
+                else {
+                  handleSubmitListDialog();
+                }
+                handleCloseListDialog();
+              }}
+            >
+              Save
+            </Button>
+            {/* Cancel Button */}
+            <Button onClick={handleCloseListDialog} color="error" size="small">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Profile Dialog Box */}
+        <Dialog open={openProfileDialog} onClose={handleCloseProfileDialog}>
+          {/* Content */}
+          <DialogContent
+            sx={{
+              backgroundColor: mode ? "white" : "#232B2B",
+            }}
+          >
+            {/* Profile Details */}
+            <div className="profDetails">
+              {user ? (
+                <>
+                  {/* Profile Pic */}
+                  <img src={user.pic ? user.pic : profilePic} alt="" />
+                  {/* Picture Upload Button */}
+                  <p>
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={(e) => {
+                        handleProfileUpload(e);
+                      }}
+                    />
+                    <label htmlFor="file">
+                      {/* Add Icon */}
+                      <AddAPhotoIcon
+                        sx={{
+                          fontSize: "1.5rem",
+                          color: "white",
+                        }}
+                      />
+                    </label>
+                  </p>
+
+                  {/* Full Name */}
+                  <TextField
+                    label="Full Name"
+                    color="secondary"
+                    type="text"
+                    name="fullname"
+                    value={user.fullname}
+                    aria-readonly="true"
+                    className="profInput"
+                    variant="filled"
+                    style={{
+                      backgroundColor: mode ? "" : "white",
+                    }}
+                    InputProps={{
+                      style: {
+                        color: "black",
+                        fontWeight: "500",
+                        letterSpacing: "0.5px",
+                      },
+                    }}
+                    onChange={(e) => {
+                      setUser({
+                        ...user,
+                        fullname: e.target.value,
+                      });
+                    }}
+                  />
+
+                  {/* Email */}
+                  <TextField
+                    label="Email Id"
+                    color="secondary"
+                    type="text"
+                    name="email"
+                    value={user.email}
+                    aria-readonly="true"
+                    className="profInput"
+                    variant="filled"
+                    style={{
+                      backgroundColor: mode ? "" : "white",
+                    }}
+                    InputProps={{
+                      style: {
+                        color: "black",
+                        fontWeight: "500",
+                        letterSpacing: "0.5px",
+                      },
+                    }}
+                  />
+
+                  {/* All Task */}
+                  <TextField
+                    label="All Task"
+                    color="secondary"
+                    type="text"
+                    name="task"
+                    value={task ? `${task.taskArr.length}` : "0"}
+                    aria-readonly="true"
+                    className="profInput"
+                    variant="filled"
+                    style={{
+                      backgroundColor: mode ? "" : "white",
+                    }}
+                    InputProps={{
+                      style: {
+                        color: "black",
+                        fontWeight: "500",
+                        letterSpacing: "0.5px",
+                      },
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {/* Skeleton For Logo */}
+                  <Skeleton
+                    variant="circular"
+                    sx={{
+                      width: "180px",
+                      height: "180px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  {/* Text Filed Skeleton */}
+                  {[0, 1, 2].map((s, i) => {
+                    return (
+                      <Skeleton
+                        key={i}
+                        variant="rectangular"
+                        height={50}
+                        sx={{
+                          width: "100%",
+                          borderRadius: "5px",
+                          m: 1,
+                        }}
+                      />
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          </DialogContent>
+          {/* Action Buton */}
+          <DialogActions>
+            {/* Save Button */}
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() => {
+                handleProfileEditFunc();
+                handleCloseProfileDialog();
+              }}
+            >
+              Save
+            </Button>
+            {/* Cancel Button */}
+            <Button
+              onClick={handleCloseProfileDialog}
+              color="error"
+              size="small"
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Snack Bar Alert */}
+        <Snackbar
+          open={snack.open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          {/* Mui Alert */}
+          <MuiAlert
+            onClose={handleClose}
+            severity={snack.severity}
+            sx={{ width: "100%" }}
+          >
+            {/* Message */}
+            <strong>{snack.message}</strong>
+          </MuiAlert>
+        </Snackbar>
+      </div>
     </>
   );
 };

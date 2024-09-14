@@ -1,17 +1,10 @@
-// Import Express
-const express = require('express');
-// Import Router
-const router = new express.Router();
 // Import JWT
 const jwt = require('jsonwebtoken');
 // Import bcryptjs
 const bcryptjs = require('bcryptjs');
 
 // Import User Collection/Model
-const User = require("../Model/user");
-
-// Import Authentication
-const auth = require('../Middleware/auth');
+const User = require("../Models/user.model");
 
 // Hash Password Func
 const hashPassword = async (ps) => {
@@ -22,7 +15,7 @@ const hashPassword = async (ps) => {
 }
 
 // SignUp API
-router.post("/register", async (req, res) => {
+const register = async (req, res) => {
     try {
         // Extract the Data
         const { fullname, email, password } = req.body;
@@ -54,20 +47,20 @@ router.post("/register", async (req, res) => {
         //  Set Bad Request Status
         res.status(400).send(`${error}`);
     }
-})
+}
 
 // Create Token Func
 const createToken = (u) => {
     return jwt.sign({ id: u._id }, process.env.SECRET_KEY,
         {
-            // Token expires by 365 days or 1 after year
+            // Token expires by 5 days or 1 after year
             expiresIn: "365d"
         }
     );
 }
 
 // SignIn API
-router.post("/login", async (req, res) => {
+const login = async (req, res) => {
     try {
         // Extract the Data
         const { email, password } = req.body;
@@ -102,10 +95,10 @@ router.post("/login", async (req, res) => {
         //  Set Bad Request Status
         res.status(400).send(`${error}`);
     }
-})
+}
 
 // Get Details API
-router.get("/get-details/:id", auth, async (req, res) => {
+const getUserDetails = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not
@@ -131,10 +124,10 @@ router.get("/get-details/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Edit Details API
-router.put("/edit-details/:id", auth, async (req, res) => {
+const editDetails = async (req, res) => {
     try {
         if (req.user.id === req.params.id) {
             // Check the user is exists or not if exists then update this
@@ -155,7 +148,7 @@ router.put("/edit-details/:id", auth, async (req, res) => {
         // Set Internal Server Error Status
         return res.status(500).send(`${error}`);
     }
-})
+}
 
 // Exports the Router
-module.exports = router;
+module.exports = { register, login, getUserDetails, editDetails };

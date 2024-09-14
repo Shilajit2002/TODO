@@ -6,10 +6,6 @@ import "./NotFound.css";
 // Import UseNavigate
 import { useNavigate } from "react-router-dom";
 
-/* ------------- Storage ------------- */
-// Cookies
-import Cookies from "js-cookie";
-
 const NotFound = () => {
   // UseNavigate
   const navigate = useNavigate();
@@ -31,11 +27,7 @@ const NotFound = () => {
         <button
           className="homepagebtn"
           onClick={() => {
-            if (Cookies.get("token") && Cookies.get("userid")) {
-              navigate("/dashboard");
-            } else {
-              navigate("/");
-            }
+            navigate("/dashboard");
           }}
         >
           GO TO HOMEPAGE
